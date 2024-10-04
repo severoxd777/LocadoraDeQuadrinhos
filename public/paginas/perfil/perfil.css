@@ -1,59 +1,135 @@
-body {
-    font-family: Arial, sans-serif;
-    background-color: #f4f4f4;
+body, html {
     margin: 0;
     padding: 0;
+    height: 100%;
+    font-family: "Arial", sans-serif;
 }
+
+body {
+    background: url("https://wallpaperaccess.com/full/1097652.jpg") no-repeat center center fixed;
+    background-size: cover;
+}
+
 .profile-container {
     max-width: 600px;
     margin: 50px auto;
-    background: #fff;
+    background-color: rgba(0, 0, 0, 0.9); /* Fundo escuro com opacidade */
     padding: 20px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5); /* Sombra mais forte */
     border-radius: 8px;
+    color: white; /* Texto branco para contraste */
 }
+
 .profile-header {
     text-align: center;
 }
+
 .profile-header img {
     width: 100px;
     height: 100px;
     border-radius: 50%;
     object-fit: cover;
     margin-bottom: 10px;
+    border: 3px solid #ffd700; /* Borda dourada */
 }
+
 .profile-header h1 {
     margin: 0;
     font-size: 24px;
+    font-family: "Comic Sans MS", cursive, sans-serif; /* Fonte estilizada */
 }
+
 .profile-header p {
-    color: #777;
+    color: #ffd700; /* Texto dourado */
     margin: 5px 0 20px;
 }
+
 .profile-details {
     list-style: none;
     padding: 0;
 }
+
 .profile-details li {
     padding: 10px 0;
     border-bottom: 1px solid #ddd;
+    color: white; /* Texto branco */
 }
+
 .profile-details li:last-child {
     border-bottom: none;
 }
+
 .admin-functions {
     margin-top: 30px;
-    background-color: #f1f1f1;
+    background-color: rgba(255, 69, 0, 0.8); /* Fundo laranja com opacidade */
     padding: 20px;
     border-radius: 8px;
 }
+
 .admin-functions h2 {
     margin-top: 0;
+    color: #ffd700; /* Título dourado */
 }
+
 .admin-functions ul {
     list-style-type: none;
     padding: 0;
 }
+
 .admin-functions ul li {
     margin: 5px 0;
+}
+
+.btn {
+    display: inline-block;
+    padding: 10px 20px;
+    background-color: #ff4500; /* Laranja */
+    color: white;
+    text-decoration: none;
+    border-radius: 5px;
+    border: none;
+    cursor: pointer;
+}
+
+.btn:hover {
+    background-color: #ff6347; /* Laranja claro */
+}
+
+
+/* Estilos da Seção de Administrações */
+#admin-section {
+    margin-top: 30px;
+    background-color: rgba(255, 69, 0, 0.7); /* Fundo laranja com opacidade */
+    padding: 20px;
+    border-radius: 8px;
+}
+
+.admin-title {
+    color: #ffd700; /* Dourado */
+    margin-top: 0;
+    font-family: "Comic Sans MS", cursive, sans-serif; /* Fonte estilizada */
+}
+
+.admin-list {
+    list-style-type: none;
+    padding: 0;
+}
+
+.admin-list li {
+    margin: 10px 0;
+}
+
+.admin-link {
+    color: white;
+    text-decoration: none;
+    font-weight: bold;
+    background-color: #0011ff; /* Laranja */
+    padding: 10px;
+    border-radius: 5px;
+    display: inline-block;
+}
+
+.admin-link:hover {
+    background-color: #ff6347; /* Laranja claro */
+    color: #ffd700; /* Dourado ao passar o mouse */
 }

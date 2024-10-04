@@ -17,16 +17,12 @@
             const adminSection = document.createElement('div');
             adminSection.setAttribute('id', 'admin-section');
             adminSection.innerHTML = `
-                <h2>Administrações:</h2>
-                <ul>
-                    <li><a href="#">Gerenciar Usuários</a></li>
-                    <li><a href="#">Gerenciar Conteúdo</a></li>
+                <h2 class="admin-title"><strong>Administrações:</strong></h2>
+                <ul class="admin-list">
+                    <li><a class="admin-link" href="#">Gerenciar Usuários</a></li>
+                    <li><a class="admin-link" href="#">Gerenciar Conteúdo</a></li>
                 </ul>
             `;
-            adminSection.style.marginTop = '30px';
-            adminSection.style.backgroundColor = '#f1f1f1';
-            adminSection.style.padding = '20px';
-            adminSection.style.borderRadius = '8px';
             
             // Adicionar a seção de administração ao final do container principal
             document.querySelector('.profile-container').appendChild(adminSection);
