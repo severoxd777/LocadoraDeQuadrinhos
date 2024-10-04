@@ -72,32 +72,27 @@ function displayManga(mangas) {
     `;
 
     mangaList.appendChild(mangaCard);
-  });
 
-  // Chamar a função para ativar a animação de rolagem para os mangás subsequentes
-  checkMangaVisibility();
-}
-
-// Função para verificar se o elemento está visível na tela
-function isElementInViewport(el) {
-  const rect = el.getBoundingClientRect();
-  return (
-    rect.top < window.innerHeight && rect.bottom >= 0
-  );
-}
-
-// Função para adicionar a classe 'show' quando o elemento está na tela
-function checkMangaVisibility() {
-  const mangaCards = document.querySelectorAll('.manga-card');
-  mangaCards.forEach(card => {
-    if (isElementInViewport(card)) {
-      card.classList.add('show');
-    }
+    // Usar IntersectionObserver para ativar a animação quando o card entrar no viewport
+    observeMangaCard(mangaCard);
   });
 }
 
-// Verificar a visibilidade das cartas de mangá ao rolar a página
-window.addEventListener('scroll', checkMangaVisibility);
+// Função para ativar a animação quando o mangá entra no viewport
+function observeMangaCard(card) {
+  const observer = new IntersectionObserver((entries, observer) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('show'); // Adicionar a classe de animação
+        observer.unobserve(entry.target); // Para de observar após a animação ocorrer
+      }
+    });
+  }, {
+    threshold: 0.08 // Card precisa estar 8% visível para ativar a animação
+  });
+
+  observer.observe(card);
+}
 
 // Buscar múltiplos mangás ao carregar a página
 document.addEventListener('DOMContentLoaded', () => {

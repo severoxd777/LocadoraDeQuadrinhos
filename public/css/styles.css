@@ -75,7 +75,7 @@ p {
   margin-bottom: 20px; /* Margem inferior para espaçamento */
   opacity: 0;
   position: relative;
-  transition: opacity 0.8s ease-out, transform 1.2s ease-out;
+  transition: opacity 1.2s ease-out, transform 1.6s ease-out;
 }
 
 /* Animação dos cartões */
