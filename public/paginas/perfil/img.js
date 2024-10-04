@@ -1,10 +1,10 @@
 // Array com os caminhos das 5 imagens
 const images = [
-    './img/kaiju-n8.jpg',
-    './img/jujutsu-kaisen.jpg',
-    './img/atack-on-titans.jpg',
-    './img/naruto.jpg',
-    './img/solo-leveling.jpg'
+    '/paginas/perfil/img/kaiju-n8.jpg',
+    '/paginas/perfil/img/jujutsu-kaisen.jpg',
+    '/paginas/perfil/img/atack-on-titans.jpg',
+    '/paginas/perfil/img/naruto.jpg',
+    '/paginas/perfil/img/solo-leveling.jpg'
 ];
 
 // Função para selecionar uma imagem aleatória
