@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Registrar - Biblioteca de Mangás</title>
+    <!-- Bootstrap CSS via CDN -->
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <!-- Estilo Personalizado -->
+    <link rel="stylesheet" href="/paginas/registrar/styles.css" />
+  </head>
+  <body>
+    <div class="register-page">
+      <div
+        class="container d-flex align-items-center justify-content-center vh-100"
+      >
+        <div
+          class="card p-4 bg-dark text-light shadow-lg"
+          style="max-width: 400px; width: 100%"
+        >
+          <div class="card-body">
+            <h3 class="card-title text-center mb-4">Registrar</h3>
+            <form>
+              <div class="mb-3">
+                <label for="name" class="form-label">Nome</label>
+                <input
+                  type="text"
+                  class="form-control"
+                  id="name"
+                  placeholder="Digite seu nome"
+                  required
+                />
+              </div>
+              <div class="mb-3">
+                <label for="email" class="form-label">Email</label>
+                <input
+                  type="email"
+                  class="form-control"
+                  id="email"
+                  placeholder="Digite seu email"
+                  required
+                />
+              </div>
+              <div class="mb-3">
+                <label for="password" class="form-label">Senha</label>
+                <input
+                  type="password"
+                  class="form-control"
+                  id="password"
+                  placeholder="Digite sua senha"
+                  required
+                />
+              </div>
+              <div class="mb-3">
+                <label for="confirmPassword" class="form-label"
+                  >Confirme sua Senha</label
+                >
+                <input
+                  type="password"
+                  class="form-control"
+                  id="confirmPassword"
+                  placeholder="Confirme sua senha"
+                  required
+                />
+              </div>
+              <div class="d-grid gap-2">
+                <button type="submit" class="btn btn-primary">Registrar</button>
+              </div>
+            </form>
+            <div class="text-center mt-3">
+              <a href="/login" class="text-light"
+                >Já tem uma conta? Faça login</a
+              >
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      document
+        .querySelector("form")
+        .addEventListener("submit", async function (e) {
+          e.preventDefault(); // Impede o comportamento padrão do formulário
+
+          // Coletar os dados do formulário
+          const nome = document.getElementById("name").value;
+          const email = document.getElementById("email").value;
+          const senha = document.getElementById("password").value;
+          const confirmSenha = document.getElementById("confirmPassword").value;
+
+          // Verifica se as senhas coincidem
+          if (senha !== confirmSenha) {
+            alert("As senhas não coincidem!");
+            return;
+          }
+
+          // Monta o corpo da requisição
+          const dados = {
+            nome: nome,
+            email: email,
+            senha: senha,
+          };
+
+          try {
+            // Envia os dados para o servidor via POST
+            const response = await fetch("http://localhost:3000/usuarios", {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify(dados), // Converte os dados para JSON
+            });
+
+            if (response.ok) {
+              const result = await response.json();
+              console.log("Usuário registrado com sucesso:", result);
+              alert("Usuário registrado com sucesso!");
+            } else {
+              console.error("Erro ao registrar o usuário");
+              alert("Erro ao registrar o usuário");
+            }
+          } catch (error) {
+            console.error("Erro de conexão", error);
+            alert("Erro ao se conectar com o servidor");
+          }
+        });
+    </script>
+
+    <!-- Bootstrap JS via CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  </body>
+</html>

@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Profile</title>
+    <link rel="stylesheet" href="./perfil.css">
+    <script src="./img.js"></script>
+</head>
+<body>
+    <div class="profile-container">
+        <div class="profile-header">
+            <img id="profile-picture" src="" alt="Profile Picture">
+            <h1>John Doe</h1>
+            <p>johndoe@example.com</p>
+        </div>
+        <ul class="profile-details">
+            <li><strong>Username:</strong> johndoe</li>
+            <li><strong>Member Since:</strong> January 2021</li>
+            <li><strong>Favorite Genre:</strong> Science Fiction</li>
+            <li><strong>Location:</strong> New York, USA</li>
+        </ul>
+    </div>
+
+    
+<!-- Esse script deve ser utilizado para definir se o usuário é ou não administrador, e o correto seria definir isso no banco de dados
+ e então a informação extraida do banco de dados é jogada com esse script no session storage definindo se é ou não um adm. -->
+ <!-- Se o usuário não for um admistrador não existe a necessidade de criar essa variável no session storage evitando brechas de segurança de uma maneira simples.-->
+    <script>
+        // Definir 'isAdmin' como 'true' no Session Storage
+        setSessionValue('isAdmin', 'true');
+
+        // Ou definir 'isAdmin' como 'false' se o usuário não for administrador, se o próprio session strage não for definido com nada (vazio ou até memso não for definido), ele irá considerar que não é um adm.
+        // setSessionValue('isAdmin', 'false');
+    </script>
+
+
+<script src="./adm.js"></script>
+</body>
+</html>

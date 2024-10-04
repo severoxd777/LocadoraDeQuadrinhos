@@ -1,0 +1,42 @@
+body,
+html {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  font-family: "Arial", sans-serif;
+}
+
+.register-page {
+  background: url("https://wallpapercave.com/wp/wp5128415.jpg") no-repeat center
+    center fixed;
+  background-size: cover;
+  height: 100%;
+}
+
+.card {
+  background-color: rgba(0, 0, 0, 0.8);
+  border: none;
+}
+
+.card-title {
+  font-family: "Comic Sans MS", cursive, sans-serif;
+}
+
+.btn-primary {
+  background-color: #ff4500; /* Laranja */
+  border-color: #ff4500;
+}
+
+.btn-primary:hover {
+  background-color: #ff6347; /* Laranja claro */
+  border-color: #ff6347;
+}
+
+.text-light a {
+  color: #ffd700; /* Dourado */
+  text-decoration: none;
+}
+
+.text-light a:hover {
+  color: #ffa500; /* Laranja */
+}

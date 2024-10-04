@@ -1,0 +1,42 @@
+body,
+html {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  font-family: "Arial", sans-serif;
+}
+
+.login-page {
+  background: url("https://assetsio.gnwcdn.com/I-wanted-an-ELDEN-RING-Anime-so-I-made-it-myself-_-REDRAW-COLLAB-3-48-screenshot.png?width=1600&height=900&fit=crop&quality=100&format=png&enable=upscale&auto=webp")
+    no-repeat center center fixed;
+  background-size: cover;
+  height: 100%;
+}
+
+.card {
+  background-color: rgba(0, 0, 0, 0.8);
+  border: none;
+}
+
+.card-title {
+  font-family: "Comic Sans MS", cursive, sans-serif;
+}
+
+.btn-primary {
+  background-color: #ff4500; /* Laranja */
+  border-color: #ff4500;
+}
+
+.btn-primary:hover {
+  background-color: #ff6347; /* Laranja claro */
+  border-color: #ff6347;
+}
+
+.text-light a {
+  color: #ffd700; /* Dourado */
+  text-decoration: none;
+}
+
+.text-light a:hover {
+  color: #ffa500; /* Laranja */
+}
