@@ -1,3 +1,107 @@
-body {
-  background-color: blueviolet;
+/* Estilo geral */
+body, html {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  font-family: "Arial", sans-serif;
+  background-color: #000; /* Fundo preto */
+  color: white; /* Texto branco */
+}
+
+.navbar {
+  background-color: rgba(0, 0, 0, 0.9); /* Navbar com fundo escuro */
+}
+
+.navbar-brand, .nav-link {
+  color: #ffd700 !important; /* Links dourados */
+}
+
+.navbar-nav .nav-item .nav-link.active {
+  color: #ff4500 !important; /* Link ativo laranja */
+}
+
+.navbar-nav .nav-link:hover {
+  color: #ff6347 !important; /* Hover em laranja claro */
+}
+
+.btn-outline-light {
+  border-color: #58ccf3; 
+  color: #add8e6; 
+}
+
+.btn-outline-light:hover {
+  background-color: #444472; 
+  border-color: #453f71; 
+}
+
+/* Estilo do Banner */
+.bg-dark {
+  background-color: rgba(0, 0, 0, 0.8); /* Fundo preto com opacidade */
+  color: #ffd700; /* Texto dourado */
+}
+
+.text-light {
+  color: white;
+}
+
+h1, p {
+  font-family: "Comic Sans MS", cursive, sans-serif; /* Fonte estilizada */
+  margin: 0;
+}
+
+h1 {
+  font-size: 3rem;
+}
+
+p {
+  font-size: 1.5rem;
+}
+
+/* Seção de Mangás */
+.container {
+  margin-top: 50px;
+}
+
+#manga-list {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+#manga-list .card {
+  background-color: rgba(183, 0, 255, 0.8);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.5); /* Sombra */
+}
+
+#manga-list .card-title {
+  font-size: 1.5rem;
+  color: #ffd700; /* Título dos mangás em dourado */
+}
+
+#manga-list .card-text {
+  color: white; /* Descrição do mangá em branco */
+}
+
+#manga-list .btn {
+  margin-top: 1rem;
+  border-color: #58ccf3; 
+  color: white;
+  border-radius: 5px;
+}
+
+#manga-list .btn:hover {
+  background-color: #444472; 
+  border-color: #453f71; 
+}
+
+/* Rodapé */
+footer {
+  background-color: rgba(128, 0, 128, 0.9);
+  color: #ffd700; /* Texto do rodapé dourado */
+}
+
+footer p {
+  margin: 0;
 }
