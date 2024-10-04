@@ -65,8 +65,38 @@ p {
 #manga-list {
   display: flex;
   flex-wrap: wrap;
+  justify-content: space-around; /* Para manter os cartões distribuídos */
+  gap: 20px; /* Pequena margem entre os cartões */
 }
 
+.manga-card {
+  flex: 0 0 30%; /* Definir largura de 30% para cada cartão */
+  max-width: 30%; /* Garantir que o cartão não ultrapasse 30% */
+  margin-bottom: 20px; /* Margem inferior para espaçamento */
+  opacity: 0;
+  position: relative;
+  transition: opacity 0.8s ease-out, transform 1.2s ease-out;
+}
+
+/* Animação dos cartões */
+.manga-card.center {
+  transform: translateY(-100px); /* O do meio desce de cima */
+}
+
+.manga-card.left {
+  transform: translate(-100px, 100px); /* O da esquerda vem da diagonal */
+}
+
+.manga-card.right {
+  transform: translate(100px, 100px); /* O da direita vem da diagonal */
+}
+
+.manga-card.show {
+  opacity: 1;
+  transform: translate(0, 0);
+}
+
+/* Estilo do Card */
 #manga-list .card {
   background-color: rgba(183, 0, 255, 0.8);
   color: white;
