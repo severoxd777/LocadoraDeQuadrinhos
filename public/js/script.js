@@ -31,14 +31,27 @@ async function fetchMangas(queries) {
   }
 }
 
-// Função para truncar a sinopse até o final do primeiro parágrafo
+// Função para truncar a sinopse até o tamanho máximo de 200 caracteres ou até o ponto final de uma frase
 function truncateSynopsis(synopsis) {
   if (!synopsis) {
     return "Descrição não disponível";
   }
 
-  const periodIndex = synopsis.indexOf(".", 100);
-  return periodIndex !== -1 ? synopsis.substring(0, periodIndex + 1) : synopsis;
+  const maxLength = 150; // Definir o limite de caracteres
+
+  // Se o tamanho da sinopse for menor que o limite, não truncar
+  if (synopsis.length <= maxLength) {
+    return synopsis;
+  }
+
+  // Tentar encontrar um ponto final próximo ao limite
+  const periodIndex = synopsis.indexOf(".", maxLength);
+  if (periodIndex !== -1 && periodIndex <= maxLength + 50) {
+    return synopsis.substring(0, periodIndex + 1);
+  }
+
+  // Se não houver ponto final, truncar no limite e adicionar "..."
+  return synopsis.substring(0, maxLength) + "...";
 }
 
 // Função para exibir os mangás
