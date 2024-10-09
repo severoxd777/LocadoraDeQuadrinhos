@@ -21,6 +21,32 @@ router.post("/", async (req, res) => {
   }
 });
 
+// Rota POST para autenticar o usuário
+router.post("/login", async (req, res) => {
+  const { email, senha } = req.body;
+
+  try {
+    const result = await pool.query(
+      "SELECT id FROM usuarios WHERE email = $1 AND senha = $2",
+      [email, senha]
+    );
+
+    if (result.rows.length > 0) {
+      // Se o usuário foi encontrado, retorna o ID dele
+      res.status(200).json({
+        message: "Login bem-sucedido",
+        usuarioId: result.rows[0].id,
+      });
+    } else {
+      // Se o usuário não foi encontrado, retorna erro
+      res.status(401).json({ message: "Email ou senha incorretos" });
+    }
+  } catch (error) {
+    console.error("Erro ao autenticar usuário", error);
+    res.status(500).json({ message: "Erro ao autenticar usuário" });
+  }
+});
+
 // Rota GET para listar todos os usuários
 router.get("/", async (req, res) => {
   try {
