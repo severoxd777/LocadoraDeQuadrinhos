@@ -1,44 +1,59 @@
 <!DOCTYPE html>
-<html lang="pt-BR"></html>
+<html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>User Profile</title>
+    <title>Perfil do Usuário</title>
     <link rel="stylesheet" href="/paginas/perfil/perfil.css">
     <script src="/paginas/perfil/img.js"></script>
 </head>
 <body>
     <div class="profile-container">
         <div class="profile-header">
-        <div style="font-family: 'Comic Sans MS', cursive, sans-serif;">
-            <h1>Bem vindo ao seu perfil!</h1>
-            <hr>
-        </div>
-            <img id="profile-picture" src="" alt="Profile Picture">
-            <h1>John Doe</h1>
-            <p>johndoe@example.com</p>
+            <div style="font-family: 'Comic Sans MS', cursive, sans-serif;">
+                <h1>Bem-vindo ao seu perfil!</h1>
+                <hr>
+            </div>
+            <img id="profile-picture" src="" alt="Foto de Perfil">
+            <h1 id="user-name"></h1>
+            <p id="user-email"></p>
         </div>
         <ul class="profile-details">
-            <li><strong>Username:</strong> johndoe</li>
-            <li><strong>Member Since:</strong> January 2021</li>
-            <li><strong>Favorite Genre:</strong> Science Fiction</li>
-            <li><strong>Location:</strong> New York, USA</li>
+            <li><strong>Preferências de Leitura:</strong> <span id="user-preferences"></span></li>
         </ul>
     </div>
 
-    
-<!-- Esse script deve ser utilizado para definir se o usuário é ou não administrador, e o correto seria definir isso no banco de dados
- e então a informação extraida do banco de dados é jogada com esse script no session storage definindo se é ou não um adm. -->
- <!-- Se o usuário não for um admistrador não existe a necessidade de criar essa variável no session storage evitando brechas de segurança de uma maneira simples.-->
+    <!-- Script para carregar informações do perfil do usuário -->
     <script>
-        // Definir 'isAdmin' como 'true' no Session Storage
-        setSessionValue('isAdmin', 'true');
+      async function loadUserProfile() {
+        const userId = sessionStorage.getItem("usuarioId");
+        
+        if (!userId) {
+          alert("Usuário não está logado");
+          window.location.href = "/login";
+          return;
+        }
+        
+        try {
+          const response = await fetch(`http://localhost:3000/usuarios/perfil/${userId}`);
+          const user = await response.json();
 
-        // Ou definir 'isAdmin' como 'false' se o usuário não for administrador, se o próprio session strage não for definido com nada (vazio ou até memso não for definido), ele irá considerar que não é um adm.
-        // setSessionValue('isAdmin', 'false');
+          if (response.ok) {
+            document.getElementById("user-name").textContent = user.nome;
+            document.getElementById("user-email").textContent = user.email;
+            document.getElementById("profile-picture").src = user.foto_perfil || getRandomImage();
+            document.getElementById("user-preferences").textContent = user.preferencias_leitura || "Não especificado";
+          } else {
+            alert(user.message || "Erro ao carregar perfil do usuário");
+          }
+        } catch (error) {
+          console.error("Erro ao carregar perfil do usuário", error);
+          alert("Erro ao conectar com o servidor");
+        }
+      }
+
+      // Chama a função para carregar as informações do usuário
+      window.onload = loadUserProfile;
     </script>
-
-
-<script src="/paginas/perfil/adm.js"></script>
 </body>
 </html>
