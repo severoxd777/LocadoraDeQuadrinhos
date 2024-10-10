@@ -18,9 +18,16 @@
             <h1 id="user-name"></h1>
             <p id="user-email"></p>
         </div>
+        <div id="user-info">
+          <!-- As informações do usuário serão carregadas aqui -->
+        </div>
         <ul class="profile-details">
             <li><strong>Preferências de Leitura:</strong> <span id="user-preferences"></span></li>
         </ul>
+        <h2 class="mt-5">Meus Mangás</h2>
+        <div id="user-mangas" class="row">
+          <!-- Os mangás serão exibidos aqui -->
+        </div>
     </div>
 
     <!-- Script para carregar informações do perfil do usuário -->
@@ -54,6 +61,99 @@
 
       // Chama a função para carregar as informações do usuário
       window.onload = loadUserProfile;
+    </script>
+
+    <script>
+      document.addEventListener('DOMContentLoaded', () => {
+        const userId = sessionStorage.getItem('usuarioId');
+        if (!userId) {
+          alert('Você precisa estar logado para ver esta página.');
+          window.location.href = '/login';
+          return;
+        }
+
+        // Buscar informações do usuário
+        fetch(`/usuarios/perfil/${userId}`)
+          .then(response => response.json())
+          .then(data => {
+            const userInfoDiv = document.getElementById('user-info');
+            userInfoDiv.innerHTML = `
+              <p><strong>Nome:</strong> ${data.nome}</p>
+              <p><strong>Email:</strong> ${data.email}</p>
+            `;
+          })
+          .catch(error => {
+            console.error('Erro ao obter informações do usuário:', error);
+            alert('Erro ao obter informações do usuário');
+          });
+
+        // Buscar os mangás do usuário
+        fetch(`/usuarios/${userId}/mangas`)
+          .then(response => response.json())
+          .then(data => {
+            const mangaIds = data.mangaIds;
+            if (mangaIds.length === 0) {
+              document.getElementById('user-mangas').innerHTML = '<p>Você ainda não adicionou nenhum mangá.</p>';
+              return;
+            }
+
+            // Para cada mangaId, buscar detalhes na API e exibir
+            mangaIds.forEach(mangaId => {
+              fetch(`https://api.jikan.moe/v4/manga/${mangaId}`)
+                .then(response => response.json())
+                .then(data => {
+                  const manga = data.data;
+                  displayManga(manga);
+                })
+                .catch(error => {
+                  console.error('Erro ao obter detalhes do mangá:', error);
+                });
+            });
+          })
+          .catch(error => {
+            console.error('Erro ao obter mangás do usuário:', error);
+            alert('Erro ao obter mangás do usuário');
+          });
+
+        function displayManga(manga) {
+          const userMangasDiv = document.getElementById('user-mangas');
+          const mangaCard = document.createElement('div');
+          mangaCard.classList.add('col-md-4', 'card');
+
+          const truncatedSynopsis = truncateSynopsis(manga.synopsis);
+
+          mangaCard.innerHTML = `
+            <div class="card mb-4 shadow-sm">
+              <img src="${manga.images.jpg.image_url}" class="card-img-top" alt="${manga.title}">
+              <div class="card-body">
+                <h5 class="card-title">${manga.title}</h5>
+                <p class="card-text">${truncatedSynopsis}</p>
+              </div>
+            </div>
+          `;
+
+          userMangasDiv.appendChild(mangaCard);
+        }
+
+        function truncateSynopsis(synopsis) {
+          if (!synopsis) {
+            return "Descrição não disponível";
+          }
+
+          const maxLength = 150; // Definir o limite de caracteres
+
+          if (synopsis.length <= maxLength) {
+            return synopsis;
+          }
+
+          const periodIndex = synopsis.indexOf(".", maxLength);
+          if (periodIndex !== -1 && periodIndex <= maxLength + 50) {
+            return synopsis.substring(0, periodIndex + 1);
+          }
+
+          return synopsis.substring(0, maxLength) + "...";
+        }
+      });
     </script>
 </body>
 </html>

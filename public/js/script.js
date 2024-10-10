@@ -57,6 +57,7 @@ function truncateSynopsis(synopsis) {
 // Função para exibir os mangás
 function displayManga(mangas) {
   const mangaList = document.getElementById("manga-list");
+  const userId = sessionStorage.getItem('usuarioId'); // Obtém o ID do usuário logado
 
   mangas.forEach((manga, index) => {
     const truncatedSynopsis = truncateSynopsis(manga.synopsis);
@@ -79,16 +80,51 @@ function displayManga(mangas) {
         <div class="card-body">
           <h5 class="card-title">${manga.title}</h5>
           <p class="card-text">${truncatedSynopsis}</p>
-          <button class="btn btn-primary">Alugar</button>
+          <button class="btn btn-primary add-manga-btn" data-manga-id="${manga.mal_id}">Adicionar</button>
         </div>
       </div>
     `;
 
     mangaList.appendChild(mangaCard);
 
+    // Adicionar listener ao botão "Adicionar"
+    const addButton = mangaCard.querySelector('.add-manga-btn');
+    addButton.addEventListener('click', () => {
+      addMangaToUser(manga.mal_id);
+    });
+
     // Usar IntersectionObserver para ativar a animação quando o card entrar no viewport
     observeMangaCard(mangaCard);
   });
+}
+
+// Função para adicionar o mangá ao usuário
+function addMangaToUser(mangaId) {
+  const userId = sessionStorage.getItem('usuarioId');
+  if (!userId) {
+    alert('Você precisa estar logado para adicionar um mangá.');
+    return;
+  }
+
+  fetch(`/usuarios/${userId}/mangas`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({ mangaId })
+  })
+    .then(response => response.json())
+    .then(data => {
+      if (data.message) {
+        alert(data.message);
+      } else {
+        alert('Mangá adicionado com sucesso!');
+      }
+    })
+    .catch(error => {
+      console.error('Erro ao adicionar mangá:', error);
+      alert('Erro ao adicionar mangá');
+    });
 }
 
 // Função para ativar a animação quando o mangá entra no viewport

@@ -36,10 +36,32 @@
               <a class="nav-link" href="/paginas/perfil/perfil.html">Meus Perfil</a>
             </li>
           </ul>
-          <div class="d-flex">
-            <a class="btn btn-outline-light" href="/paginas/login/login.html" style="margin-right: 1rem;">Login</a>
-            <a class="btn btn-outline-light" href="/paginas/registrar/registrar.html">Registrar</a>
-          </div>
+      <!-- Dentro da navbar -->
+      <div class="d-flex">
+        <a id="login-link" class="btn btn-outline-light" href="/paginas/login/login.html" style="margin-right: 1rem;">Login</a>
+        <a id="register-link" class="btn btn-outline-light" href="/paginas/registrar/registrar.html">Registrar</a>
+        <a id="logout-link" class="btn btn-outline-light d-none" href="#" onclick="logout()">Logout</a>
+      </div>
+      
+      <script>
+        function checkLoginStatus() {
+          const userId = sessionStorage.getItem('usuarioId');
+          if (userId) {
+            document.getElementById('login-link').classList.add('d-none');
+            document.getElementById('register-link').classList.add('d-none');
+            document.getElementById('logout-link').classList.remove('d-none');
+          }
+        }
+      
+        function logout() {
+          sessionStorage.removeItem('usuarioId');
+          window.location.href = '/';
+        }
+      
+        document.addEventListener('DOMContentLoaded', checkLoginStatus);
+      </script>
+      
+      
         </div>
       </div>
     </nav>

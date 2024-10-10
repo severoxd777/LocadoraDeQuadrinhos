@@ -32,6 +32,13 @@ const createTables = async () => {
         data TIMESTAMP DEFAULT CURRENT_TIMESTAMP
       );
 
+      -- Nova tabela para relacionar usuários e mangás
+      CREATE TABLE IF NOT EXISTS user_mangas (
+        user_id INT REFERENCES usuarios(id) ON DELETE CASCADE,
+        manga_id INT NOT NULL,
+        PRIMARY KEY (user_id, manga_id)
+      );
+
       DO $$
       BEGIN
         IF NOT EXISTS (

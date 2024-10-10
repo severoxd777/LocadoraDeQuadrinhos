@@ -47,6 +47,42 @@ router.post("/login", async (req, res) => {
   }
 });
 
+// Rota POST para adicionar um mangá à lista do usuário
+router.post("/:id/mangas", async (req, res) => {
+  const userId = req.params.id;
+  const { mangaId } = req.body;
+
+  try {
+    await pool.query(
+      "INSERT INTO user_mangas (user_id, manga_id) VALUES ($1, $2) ON CONFLICT DO NOTHING",
+      [userId, mangaId]
+    );
+    res.status(200).json({ message: "Mangá adicionado com sucesso!" });
+  } catch (error) {
+    console.error("Erro ao adicionar mangá ao usuário", error);
+    res.status(500).json({ message: "Erro ao adicionar mangá ao usuário" });
+  }
+});
+
+// Rota GET para obter os mangás salvos pelo usuário
+router.get("/:id/mangas", async (req, res) => {
+  const userId = req.params.id;
+
+  try {
+    const result = await pool.query(
+      "SELECT manga_id FROM user_mangas WHERE user_id = $1",
+      [userId]
+    );
+
+    const mangaIds = result.rows.map(row => row.manga_id);
+
+    res.status(200).json({ mangaIds });
+  } catch (error) {
+    console.error("Erro ao obter mangás do usuário", error);
+    res.status(500).json({ message: "Erro ao obter mangás do usuário" });
+  }
+});
+
 // Rota GET para buscar as informações do usuário logado
 router.get("/perfil/:id", async (req, res) => {
   const { id } = req.params;
