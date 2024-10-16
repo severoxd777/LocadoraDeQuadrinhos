@@ -133,3 +133,19 @@ body {
     background-color: #ff6347; /* Laranja claro */
     color: #ffd700; /* Dourado ao passar o mouse */
 }
+
+.delete-user-btn {
+    padding: 8px 12px;
+    background-color: #ff4500; /* Laranja */
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: bold;
+    margin-left: 3rem;
+}
+
+.delete-user-btn:hover {
+    background-color: #ff6347; /* Laranja claro */
+    color: #ffd700; /* Texto dourado ao passar o mouse */
+}

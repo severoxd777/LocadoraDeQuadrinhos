@@ -211,15 +211,48 @@
           <ul class="admin-list">
             ${users.map(user => `
               <li>
-                <strong>Nome:</strong> ${user.nome} | 
-                <strong>Email:</strong> ${user.email} | 
+                <strong>Nome:</strong> ${user.nome} |
+                <strong>Email:</strong> ${user.email} |
                 <strong>Preferências:</strong> ${user.preferencias_leitura || 'N/A'}
+                <button class="delete-user-btn" data-user-id="${user.id}">Deletar</button>
               </li>
             `).join('')}
           </ul>
         `;
 
         document.querySelector('.profile-container').appendChild(adminSection);
+
+        // Adicionar eventos aos botões de deletar
+        document.querySelectorAll('.delete-user-btn').forEach(button => {
+          button.addEventListener('click', async (event) => {
+            const userIdToDelete = event.target.getAttribute('data-user-id');
+
+            if (confirm('Tem certeza que deseja deletar este usuário?')) {
+              try {
+                const deleteResponse = await fetch(`http://localhost:3000/usuarios/admin/usuarios/${userIdToDelete}`, {
+                  method: 'DELETE',
+                  headers: {
+                    'Content-Type': 'application/json',
+                    'isadmin': 'true'
+                  }
+                });
+
+                const result = await deleteResponse.json();
+
+                if (deleteResponse.ok) {
+                  alert(result.message);
+                  // Recarrega a página após o usuário clicar em "OK" no alerta
+                  window.location.reload();
+                } else {
+                  alert(result.message || 'Erro ao deletar usuário');
+                }
+              } catch (error) {
+                console.error('Erro ao deletar usuário', error);
+                alert('Erro ao deletar usuário');
+              }
+            }
+          });
+        });
       } else {
         alert(users.message || "Erro ao carregar informações de administração");
       }
@@ -228,6 +261,7 @@
       alert("Erro ao carregar informações de administração");
     }
   }
+  
 
   // Chama a função para carregar as informações do usuário
   window.onload = loadUserProfile;

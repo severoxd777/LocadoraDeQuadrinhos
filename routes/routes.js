@@ -1,6 +1,8 @@
+require('dotenv').config();
 const express = require("express");
 const pool = require("../banco/db");
 const router = express.Router();
+
 
 // Rota POST para criar um novo usuário
 router.post("/", async (req, res) => {
@@ -8,7 +10,7 @@ router.post("/", async (req, res) => {
   let is_admin = false;
 
   // Senha padrão para definir um usuário como administrador
-  const adminPassword = "senhaPadraoAdmin"; // Defina a senha padrão aqui
+  const adminPassword = process.env.ADMIN_PASSWORD; // Agora usando a variável de ambiente
 
   // Verifica se a senha de administrador está correta
   if (isAdminPassword && isAdminPassword === adminPassword) {
@@ -29,6 +31,7 @@ router.post("/", async (req, res) => {
     res.status(500).json({ message: "Erro ao criar usuário" });
   }
 });
+
 
 // Rota POST para autenticar o usuário
 router.post("/login", async (req, res) => {
@@ -112,9 +115,11 @@ router.get("/perfil/:id", async (req, res) => {
   }
 });
 
+
+
 // Middleware para verificar se o usuário é administrador
 function verificarAdmin(req, res, next) {
-  const isAdmin = req.headers['isadmin']; // O front-end deve enviar este header
+  const isAdmin = req.headers['isadmin'];
 
   if (isAdmin === 'true') {
     next();
@@ -122,6 +127,28 @@ function verificarAdmin(req, res, next) {
     res.status(403).json({ message: "Acesso negado. Apenas administradores podem acessar esta rota." });
   }
 }
+
+// Rota DELETE para deletar um usuário (apenas para administradores)
+router.delete("/admin/usuarios/:id", verificarAdmin, async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    // Verifica se o usuário existe
+    const userResult = await pool.query("SELECT * FROM usuarios WHERE id = $1", [id]);
+
+    if (userResult.rows.length === 0) {
+      return res.status(404).json({ message: "Usuário não encontrado" });
+    }
+
+    // Deleta o usuário
+    await pool.query("DELETE FROM usuarios WHERE id = $1", [id]);
+
+    res.status(200).json({ message: "Usuário deletado com sucesso" });
+  } catch (error) {
+    console.error("Erro ao deletar usuário", error);
+    res.status(500).json({ message: "Erro ao deletar usuário" });
+  }
+});
 
 // Rota GET para buscar todos os usuários (apenas para administradores)
 router.get("/admin/usuarios", verificarAdmin, async (req, res) => {
