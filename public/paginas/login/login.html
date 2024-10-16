@@ -58,26 +58,27 @@
 
     <script>
       document.querySelector("form").addEventListener("submit", async function (e) {
-        e.preventDefault(); // Impede o comportamento padrão do formulário
-    
+        e.preventDefault();
+
         // Coletar os dados do formulário
         const email = document.getElementById("email").value;
         const senha = document.getElementById("password").value;
-    
+
         try {
           // Envia os dados para o servidor via POST
-          const response = await fetch("/usuarios/login", {
+          const response = await fetch("http://localhost:3000/usuarios/login", {
             method: "POST",
             headers: {
               "Content-Type": "application/json",
             },
             body: JSON.stringify({ email, senha }),
           });
-    
+
           const result = await response.json();
           if (response.ok) {
-            // Armazena o ID do usuário no sessionStorage
+            // Armazena o ID do usuário e isAdmin no sessionStorage
             sessionStorage.setItem("usuarioId", result.usuarioId);
+            sessionStorage.setItem("isAdmin", result.isAdmin); // Armazena se o usuário é administrador
             alert("Login bem-sucedido!");
             window.location.href = "/perfil"; // Redireciona para a página de perfil
           } else {

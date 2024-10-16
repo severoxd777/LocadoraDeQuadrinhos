@@ -9,7 +9,8 @@ const createTables = async () => {
         email VARCHAR(100) UNIQUE NOT NULL,
         senha VARCHAR(255) NOT NULL,
         foto_perfil TEXT,
-        preferencias_leitura TEXT
+        preferencias_leitura TEXT,
+        is_admin BOOLEAN DEFAULT FALSE
       );
 
       CREATE TABLE IF NOT EXISTS perfis_acesso (

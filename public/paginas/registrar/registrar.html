@@ -66,6 +66,15 @@
                   required
                 />
               </div>
+              <div class="mb-3">
+                <label for="adminPassword" class="form-label">Senha de Administrador (opcional)</label>
+                <input
+                  type="password"
+                  class="form-control"
+                  id="adminPassword"
+                  placeholder="Digite a senha de administrador se aplicável"
+                />
+              </div>
               <div class="d-grid gap-2">
                 <button type="submit" class="btn btn-primary">Registrar</button>
               </div>
@@ -84,13 +93,14 @@
       document
         .querySelector("form")
         .addEventListener("submit", async function (e) {
-          e.preventDefault(); // Impede o comportamento padrão do formulário
+          e.preventDefault();
 
           // Coletar os dados do formulário
           const nome = document.getElementById("name").value;
           const email = document.getElementById("email").value;
           const senha = document.getElementById("password").value;
           const confirmSenha = document.getElementById("confirmPassword").value;
+          const adminPasswordInput = document.getElementById("adminPassword").value;
 
           // Verifica se as senhas coincidem
           if (senha !== confirmSenha) {
@@ -105,6 +115,11 @@
             senha: senha,
           };
 
+          // Se o campo de senha de administrador foi preenchido, adiciona ao objeto
+          if (adminPasswordInput) {
+            dados.isAdminPassword = adminPasswordInput;
+          }
+
           try {
             // Envia os dados para o servidor via POST
             const response = await fetch("http://localhost:3000/usuarios", {
@@ -112,13 +127,14 @@
               headers: {
                 "Content-Type": "application/json",
               },
-              body: JSON.stringify(dados), // Converte os dados para JSON
+              body: JSON.stringify(dados),
             });
 
             if (response.ok) {
               const result = await response.json();
               console.log("Usuário registrado com sucesso:", result);
               alert("Usuário registrado com sucesso!");
+              window.location.href = "/login";
             } else {
               console.error("Erro ao registrar o usuário");
               alert("Erro ao registrar o usuário");

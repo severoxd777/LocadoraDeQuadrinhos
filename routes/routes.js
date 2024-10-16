@@ -4,12 +4,21 @@ const router = express.Router();
 
 // Rota POST para criar um novo usuário
 router.post("/", async (req, res) => {
-  const { nome, email, senha } = req.body;
+  const { nome, email, senha, isAdminPassword } = req.body;
+  let is_admin = false;
+
+  // Senha padrão para definir um usuário como administrador
+  const adminPassword = "senhaPadraoAdmin"; // Defina a senha padrão aqui
+
+  // Verifica se a senha de administrador está correta
+  if (isAdminPassword && isAdminPassword === adminPassword) {
+    is_admin = true;
+  }
 
   try {
     const result = await pool.query(
-      "INSERT INTO usuarios (nome, email, senha) VALUES ($1, $2, $3) RETURNING *",
-      [nome, email, senha]
+      "INSERT INTO usuarios (nome, email, senha, is_admin) VALUES ($1, $2, $3, $4) RETURNING *",
+      [nome, email, senha, is_admin]
     );
     res.status(201).json({
       message: "Usuário criado com sucesso",
@@ -27,18 +36,17 @@ router.post("/login", async (req, res) => {
 
   try {
     const result = await pool.query(
-      "SELECT id FROM usuarios WHERE email = $1 AND senha = $2",
+      "SELECT id, is_admin FROM usuarios WHERE email = $1 AND senha = $2",
       [email, senha]
     );
 
     if (result.rows.length > 0) {
-      // Se o usuário foi encontrado, retorna o ID dele
       res.status(200).json({
         message: "Login bem-sucedido",
         usuarioId: result.rows[0].id,
+        isAdmin: result.rows[0].is_admin, // Retorna se o usuário é administrador
       });
     } else {
-      // Se o usuário não foi encontrado, retorna erro
       res.status(401).json({ message: "Email ou senha incorretos" });
     }
   } catch (error) {
@@ -104,26 +112,25 @@ router.get("/perfil/:id", async (req, res) => {
   }
 });
 
+// Middleware para verificar se o usuário é administrador
+function verificarAdmin(req, res, next) {
+  const isAdmin = req.headers['isadmin']; // O front-end deve enviar este header
+
+  if (isAdmin === 'true') {
+    next();
+  } else {
+    res.status(403).json({ message: "Acesso negado. Apenas administradores podem acessar esta rota." });
+  }
+}
+
 // Rota GET para buscar todos os usuários (apenas para administradores)
-router.get("/admin/usuarios", async (req, res) => {
+router.get("/admin/usuarios", verificarAdmin, async (req, res) => {
   try {
     const result = await pool.query("SELECT id, nome, email, foto_perfil, preferencias_leitura FROM usuarios");
     res.status(200).json(result.rows);
   } catch (error) {
     console.error("Erro ao buscar todos os usuários", error);
     res.status(500).json({ message: "Erro ao buscar todos os usuários" });
-  }
-});
-
-
-// Rota GET para listar todos os usuários
-router.get("/", async (req, res) => {
-  try {
-    const result = await pool.query("SELECT * FROM usuarios");
-    res.json(result.rows);
-  } catch (err) {
-    console.error("Erro ao buscar usuários", err);
-    res.status(500).send("Erro ao buscar usuários");
   }
 });
 

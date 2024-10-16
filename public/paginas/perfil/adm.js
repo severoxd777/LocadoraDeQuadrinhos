@@ -1,12 +1,7 @@
-    // Função para definir um valor no Session Storage
-    function setSessionValue(key, value) {
-        sessionStorage.setItem(key, value);
-    }
-
-    // Função para obter um valor do Session Storage
-    function getSessionValue(key) {
-        return sessionStorage.getItem(key);
-    }
+// Função para verificar se o usuário é administrador
+function isUserAdmin() {
+  return sessionStorage.getItem('isAdmin') === 'true';
+}
 
     async function checkAdmin() {
         const isAdmin = getSessionValue('isAdmin');  // Buscar o valor do session storage 'isAdmin'
@@ -46,4 +41,6 @@
       
       // Chama a função para verificar se o usuário é admin ao carregar a página
       checkAdmin();
+
+      window.onload = checkAdmin;
       
