@@ -161,4 +161,31 @@ router.get("/admin/usuarios", verificarAdmin, async (req, res) => {
   }
 });
 
+// Rota PUT para atualizar as preferências de leitura do usuário
+router.put("/perfil/:id", async (req, res) => {
+  const { id } = req.params;
+  const { preferencias_leitura } = req.body;
+
+  try {
+      // Verifica se o usuário existe
+      const userResult = await pool.query("SELECT * FROM usuarios WHERE id = $1", [id]);
+
+      if (userResult.rows.length === 0) {
+          return res.status(404).json({ message: "Usuário não encontrado" });
+      }
+
+      // Atualiza as preferências do usuário
+      await pool.query(
+          "UPDATE usuarios SET preferencias_leitura = $1 WHERE id = $2",
+          [preferencias_leitura, id]
+      );
+
+      res.status(200).json({ message: "Preferências atualizadas com sucesso" });
+  } catch (error) {
+      console.error("Erro ao atualizar preferências do usuário", error);
+      res.status(500).json({ message: "Erro ao atualizar preferências do usuário" });
+  }
+});
+
+
 module.exports = router;

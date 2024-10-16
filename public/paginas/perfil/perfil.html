@@ -31,16 +31,75 @@
             <p id="user-email"></p>
         </div>
         <div id="user-info">
-          <!-- As informações do usuário serão carregadas aqui -->
+        <!-- As informações do usuário serão carregadas aqui -->
         </div>
         <ul class="profile-details">
             <li><strong>Preferências de Leitura:</strong> <span id="user-preferences"></span></li>
         </ul>
+        <div class="preferences-section">
+          <h2>Editar Preferências de Leitura</h2>
+          <textarea id="preferences-input" rows="4" placeholder="Digite suas preferências de mangá..."></textarea>
+          <button id="save-preferences-btn">Salvar Preferências</button>
+        </div>
+        <!-- Os mangás serão exibidos aqui -->
         <h2 class="mt-5">Meus Mangás</h2>
         <div id="user-mangas" class="row">
-          <!-- Os mangás serão exibidos aqui -->
         </div>
     </div>
+
+    <script>
+      // Função para carregar as preferências do usuário
+async function loadUserPreferences() {
+    const userId = sessionStorage.getItem("usuarioId");
+
+    try {
+        const response = await fetch(`http://localhost:3000/usuarios/perfil/${userId}`);
+        const user = await response.json();
+
+        if (response.ok) {
+            // Carrega as preferências no textarea
+            document.getElementById("preferences-input").value = user.preferencias_leitura || "";
+        } else {
+            alert(user.message || "Erro ao carregar preferências do usuário");
+        }
+    } catch (error) {
+        console.error("Erro ao carregar preferências do usuário", error);
+        alert("Erro ao conectar com o servidor");
+    }
+}
+
+// Função para salvar as preferências do usuário
+async function saveUserPreferences() {
+    const userId = sessionStorage.getItem("usuarioId");
+    const preferencias = document.getElementById("preferences-input").value;
+
+    try {
+        const response = await fetch(`http://localhost:3000/usuarios/perfil/${userId}`, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ preferencias_leitura: preferencias })
+        });
+
+        const result = await response.json();
+
+        if (response.ok) {
+            alert("Preferências atualizadas com sucesso!");
+            // Atualiza o campo de preferências exibido
+            document.getElementById("user-preferences").textContent = preferencias;
+        } else {
+            alert(result.message || "Erro ao atualizar preferências");
+        }
+    } catch (error) {
+        console.error("Erro ao atualizar preferências", error);
+        alert("Erro ao conectar com o servidor");
+    }
+}
+
+// Adiciona evento ao botão de salvar preferências
+document.getElementById("save-preferences-btn").addEventListener('click', saveUserPreferences);
+    </script>
 
     <!-- Script para carregar informações do perfil do usuário -->
     <script>
@@ -277,6 +336,11 @@
 
   // Chama a função para carregar as informações do usuário
   window.onload = loadUserProfile;
+  // Chama a função para carregar as preferências ao carregar a página
+  window.onload = function() {
+    loadUserProfile();
+    loadUserPreferences();
+};
 </script>
 </body>
 </html>
