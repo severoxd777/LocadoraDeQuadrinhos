@@ -103,6 +103,7 @@ function addMangaToUser(mangaId) {
   const userId = sessionStorage.getItem('usuarioId');
   if (!userId) {
     alert('Você precisa estar logado para adicionar um mangá.');
+    window.location.href = '/registrar';
     return;
   }
 

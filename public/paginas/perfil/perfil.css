@@ -149,3 +149,29 @@ body {
     background-color: #ff6347; /* Laranja claro */
     color: #ffd700; /* Texto dourado ao passar o mouse */
 }
+
+.home-link {
+    display: flex;
+    justify-content: end;
+    margin-top: -1.8rem;
+}
+
+.home-link a {
+    color: white;
+    text-decoration: none;
+    font-size: 18px;
+    font-weight: bold;
+    font-family: 'Comic Sans MS', cursive, sans-serif;
+}
+
+.home-link a:hover {
+    color: #ffd700; /* Dourado ao passar o mouse */
+}
+
+.home-link i {
+    margin-right: 0.3rem;
+}
+
+.profile-header-top {
+    font-family: 'Comic Sans MS', cursive, sans-serif;
+}

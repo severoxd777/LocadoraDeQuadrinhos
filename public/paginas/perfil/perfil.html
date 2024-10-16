@@ -3,17 +3,29 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Perfil do Usuário</title>
+
     <link rel="stylesheet" href="/paginas/perfil/perfil.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
     <script src="/paginas/perfil/img.js"></script>
+
+    <title>Perfil do Usuário</title>
+
 </head>
 <body>
     <div class="profile-container">
         <div class="profile-header">
-            <div style="font-family: 'Comic Sans MS', cursive, sans-serif;">
+            <div class="profile-header-top">
+              <div style="display: flex; justify-content: center;">
                 <h1>Bem-vindo ao seu perfil!</h1>
-                <hr>
+              </div>
+                <div class="home-link">
+                  <a href="/">
+                      <i class="fas fa-home"></i>Home
+                  </a>
+              </div>
             </div>
+            <hr>
             <img id="profile-picture" src="" alt="Foto de Perfil">
             <h1 id="user-name"></h1>
             <p id="user-email"></p>
