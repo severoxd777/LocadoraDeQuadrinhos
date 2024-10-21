@@ -1,5 +1,24 @@
 const API_URL = "https://api.jikan.moe/v4/manga?q=";
 
+// Função para analisar as preferências do usuário, considerando aspas duplas
+function parsePreferences(preferences) {
+  const regex = /"([^"]+)"|[^,]+/g;
+  const matches = [];
+  let match;
+
+  while ((match = regex.exec(preferences)) !== null) {
+    if (match[1]) {
+      // Se corresponder a algo entre aspas
+      matches.push(match[1].trim());
+    } else {
+      // Se corresponder a palavras fora das aspas
+      matches.push(match[0].trim());
+    }
+  }
+
+  return matches;
+}
+
 // Função para buscar múltiplos mangás e exibir os 10 mais relevantes na página
 async function fetchMangas(queries) {
   const mangaList = document.getElementById("manga-list");
@@ -144,6 +163,25 @@ function observeMangaCard(card) {
 }
 
 // Buscar múltiplos mangás ao carregar a página
-document.addEventListener('DOMContentLoaded', () => {
-  fetchMangas(["Naruto", "Dragon Ball", "Jujutsu"]);
+document.addEventListener('DOMContentLoaded', async () => {
+  const userId = sessionStorage.getItem('usuarioId');
+  let queries = ["Naruto", "Dragon Ball", "Jujutsu"]; // Consultas padrão
+
+  if (userId) {
+    try {
+      // Buscar as preferências do usuário no backend
+      const response = await fetch(`http://localhost:3000/usuarios/perfil/${userId}`);
+      const user = await response.json();
+
+      if (response.ok && user.preferencias_leitura) {
+        // Se o usuário tiver preferências, utiliza-las como consultas
+        queries = parsePreferences(user.preferencias_leitura);
+      }
+    } catch (error) {
+      console.error('Erro ao obter preferências do usuário:', error);
+    }
+  }
+
+  // Buscar mangás usando as consultas determinadas
+  fetchMangas(queries);
 });

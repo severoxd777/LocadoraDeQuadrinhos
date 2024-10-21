@@ -9,7 +9,7 @@ const createTables = async () => {
         email VARCHAR(100) UNIQUE NOT NULL,
         senha VARCHAR(255) NOT NULL,
         foto_perfil TEXT,
-        preferencias_leitura TEXT,
+        preferencias_leitura TEXT DEFAULT '"Naruto", "Dragon Ball", "Jujutsu"',
         is_admin BOOLEAN DEFAULT FALSE
       );
 

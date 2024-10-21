@@ -38,9 +38,11 @@
         </ul>
         <div class="preferences-section">
           <h2>Editar Preferências de Leitura</h2>
-          <textarea id="preferences-input" rows="4" placeholder="Digite suas preferências de mangá..."></textarea>
+          <p>Separe as preferências por vírgulas. Use aspas para títulos compostos.</p>
+          <textarea id="preferences-input" rows="4" placeholder='Exemplo: "My Hero Academia", "Attack on Titan", "One Piece", Naruto, Jujutsu'></textarea>
           <button id="save-preferences-btn">Salvar Preferências</button>
         </div>
+      
         <!-- Os mangás serão exibidos aqui -->
         <h2 class="mt-5">Meus Mangás</h2>
         <div id="user-mangas" class="row">
@@ -283,8 +285,11 @@ document.getElementById("save-preferences-btn").addEventListener('click', saveUs
             ${users.map(user => `
               <li>
                 <strong>Nome:</strong> ${user.nome} |
+                <br>
                 <strong>Email:</strong> ${user.email} |
+                <br>
                 <strong>Preferências:</strong> ${user.preferencias_leitura || 'N/A'}
+                <br>
                 <button class="delete-user-btn" data-user-id="${user.id}">Deletar</button>
               </li>
             `).join('')}

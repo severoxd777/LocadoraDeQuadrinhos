@@ -113,10 +113,18 @@ body {
 .admin-list {
     list-style-type: none;
     padding: 0;
+    display: flex;
+    justify-content: center;
+    text-align: left;
+    flex-direction: column;
 }
 
 .admin-list li {
     margin: 10px 0;
+    border: 2px solid gold;
+    border-radius: 15px;
+    padding: 20px;
+    height: auto;
 }
 
 .admin-link {
@@ -143,6 +151,10 @@ body {
     cursor: pointer;
     font-weight: bold;
     margin-left: 3rem;
+    margin: 2%;
+    display: flex;
+    justify-self: right;
+    margin-top: -9%;
 }
 
 .delete-user-btn:hover {

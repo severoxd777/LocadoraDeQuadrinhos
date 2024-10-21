@@ -94,6 +94,7 @@ router.get("/:id/mangas", async (req, res) => {
   }
 });
 
+
 // Rota GET para buscar as informações do usuário logado
 router.get("/perfil/:id", async (req, res) => {
   const { id } = req.params;
@@ -114,7 +115,6 @@ router.get("/perfil/:id", async (req, res) => {
     res.status(500).json({ message: "Erro ao buscar informações do usuário" });
   }
 });
-
 
 
 // Middleware para verificar se o usuário é administrador
