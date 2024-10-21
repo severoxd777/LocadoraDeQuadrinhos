@@ -150,6 +150,55 @@ router.delete("/admin/usuarios/:id", verificarAdmin, async (req, res) => {
   }
 });
 
+// Rota DELETE para remover um mangá do perfil do usuário
+router.delete("/:userId/mangas/:mangaId", async (req, res) => {
+  let { userId, mangaId } = req.params;
+
+  console.log(`Recebida solicitação para deletar o mangá ${mangaId} do usuário ${userId}`);
+
+  // Converter IDs para inteiros
+  userId = parseInt(userId, 10);
+  mangaId = parseInt(mangaId, 10);
+
+  if (isNaN(userId) || isNaN(mangaId)) {
+    console.error("IDs inválidos fornecidos.");
+    return res.status(400).json({ message: "IDs inválidos" });
+  }
+
+  try {
+    // Verifica se o usuário existe
+    const userResult = await pool.query("SELECT * FROM usuarios WHERE id = $1", [userId]);
+
+    if (userResult.rows.length === 0) {
+      console.error("Usuário não encontrado.");
+      return res.status(404).json({ message: "Usuário não encontrado" });
+    }
+
+    // Verifica se o mangá está associado ao usuário
+    const userMangaResult = await pool.query(
+      "SELECT * FROM user_mangas WHERE user_id = $1 AND manga_id = $2",
+      [userId, mangaId]
+    );
+
+    if (userMangaResult.rows.length === 0) {
+      console.error("Mangá não encontrado no perfil do usuário.");
+      return res.status(404).json({ message: "Mangá não encontrado no perfil do usuário" });
+    }
+
+    // Remove o mangá do perfil do usuário
+    await pool.query(
+      "DELETE FROM user_mangas WHERE user_id = $1 AND manga_id = $2",
+      [userId, mangaId]
+    );
+
+    console.log("Mangá removido com sucesso.");
+    res.status(200).json({ message: "Mangá removido com sucesso do perfil do usuário" });
+  } catch (error) {
+    console.error("Erro ao remover mangá do usuário", error);
+    res.status(500).json({ message: "Erro ao remover mangá do usuário" });
+  }
+});
+
 // Rota GET para buscar todos os usuários (apenas para administradores)
 router.get("/admin/usuarios", verificarAdmin, async (req, res) => {
   try {

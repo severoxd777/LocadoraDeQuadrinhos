@@ -226,3 +226,18 @@ body {
 #save-preferences-btn:hover {
     background-color: #ffd700; /* Laranja claro */
 }
+
+.delete-manga-btn {
+    margin-top: 10px;
+    padding: 10px 20px;
+    background-color: #ff4500;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: bold;
+  }
+  
+  .delete-manga-btn:hover {
+    background-color: #cc3700;
+  }
