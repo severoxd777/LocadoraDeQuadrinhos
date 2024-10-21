@@ -236,5 +236,67 @@ router.put("/perfil/:id", async (req, res) => {
   }
 });
 
+// Rota PUT para atualizar as informações do usuário
+router.put("/:id", async (req, res) => {
+  const { id } = req.params;
+  const { nome, email, currentPassword, newPassword } = req.body;
+
+  try {
+    // Verifica se o usuário existe
+    const userResult = await pool.query("SELECT * FROM usuarios WHERE id = $1", [id]);
+
+    if (userResult.rows.length === 0) {
+      return res.status(404).json({ message: "Usuário não encontrado" });
+    }
+
+    const user = userResult.rows[0];
+
+    // Atualização dos campos de nome e email
+    let updateFields = [];
+    let updateValues = [];
+    let paramIndex = 1;
+
+    if (nome && nome !== user.nome) {
+      updateFields.push(`nome = $${paramIndex++}`);
+      updateValues.push(nome);
+    }
+
+    if (email && email !== user.email) {
+      updateFields.push(`email = $${paramIndex++}`);
+      updateValues.push(email);
+    }
+
+    // Atualização da senha
+    if (currentPassword || newPassword) {
+      if (!currentPassword || !newPassword) {
+        return res.status(400).json({ message: "Para alterar a senha, forneça a senha atual e a nova senha" });
+      }
+
+      if (currentPassword !== user.senha) {
+        return res.status(400).json({ message: "Senha atual incorreta" });
+      }
+
+      updateFields.push(`senha = $${paramIndex++}`);
+      updateValues.push(newPassword);
+    }
+
+    if (updateFields.length === 0) {
+      return res.status(400).json({ message: "Nenhuma alteração foi fornecida" });
+    }
+
+    updateValues.push(id); // Adiciona o ID para a cláusula WHERE
+
+    const updateQuery = `UPDATE usuarios SET ${updateFields.join(', ')} WHERE id = $${paramIndex}`;
+
+    await pool.query(updateQuery, updateValues);
+
+    res.status(200).json({ message: "Perfil atualizado com sucesso" });
+  } catch (error) {
+    console.error("Erro ao atualizar perfil do usuário", error);
+    res.status(500).json({ message: "Erro ao atualizar perfil do usuário" });
+  }
+});
+
+
 
 module.exports = router;

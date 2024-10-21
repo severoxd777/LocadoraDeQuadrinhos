@@ -36,6 +36,14 @@
         <ul class="profile-details">
             <li><strong>Preferências de Leitura:</strong> <span id="user-preferences"></span></li>
         </ul>
+
+        <!-- Botão para editar o perfil -->
+        <button id="edit-profile-btn" class="btn btn-primary">Editar Perfil</button>
+        <!-- Formulário de edição (inicialmente oculto) -->
+        <div id="edit-profile-container" class="edit-profile-container">
+        <!-- O formulário será preenchido aqui via JavaScript -->
+        </div>
+
         <div class="preferences-section">
           <h2>Editar Preferências de Leitura</h2>
           <p>Separe as preferências por vírgulas. Use aspas para títulos compostos.</p>
@@ -47,9 +55,15 @@
         <h2 class="mt-5">Meus Mangás</h2>
         <div id="user-mangas" class="row">
         </div>
+      </div>
     </div>
 
+
+
+
+
 <script src="/paginas/perfil/userProfile.js"></script>
+<script src="/paginas/perfil/editProfile.js"></script>
 <script src="/paginas/perfil/adm.js"></script>
 
 

@@ -63,24 +63,35 @@ async function loadUserProfile() {
     try {
       const response = await fetch(`http://localhost:3000/usuarios/perfil/${userId}`);
       const user = await response.json();
-
+  
       if (response.ok) {
         document.getElementById("user-name").textContent = user.nome;
         document.getElementById("user-email").textContent = user.email;
         document.getElementById("profile-picture").src = user.foto_perfil || getRandomImage();
         document.getElementById("user-preferences").textContent = user.preferencias_leitura || "Não especificado";
+        return Promise.resolve(); // Indica que o carregamento foi bem-sucedido
       } else {
         alert(user.message || "Erro ao carregar perfil do usuário");
+        return Promise.reject();
       }
     } catch (error) {
       console.error("Erro ao carregar perfil do usuário", error);
       alert("Erro ao conectar com o servidor");
+      return Promise.reject();
     }
   }
-
-// Chama a função para carregar as informações do usuário
-window.onload = loadUserProfile;
-
+  
+  // Chama a função para carregar as informações do usuário
+  window.onload = function() {
+    loadUserProfile()
+      .then(() => {
+        // Carrega outros scripts que dependem das informações do usuário
+      })
+      .catch(() => {
+        // Lida com erros
+      });
+  };
+  
 
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -213,4 +224,3 @@ async function deleteMangaFromUser(mangaId, mangaCard) {
       }
     }
   }
-  

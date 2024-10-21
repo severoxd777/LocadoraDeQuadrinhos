@@ -190,9 +190,7 @@ body {
 
 /* Estilos para a seção de preferências */
 .preferences-section {
-    margin-top: 30px;
-    background-color: rgba(0, 0, 0, 0.8); /* Fundo escuro com opacidade */
-    padding: 20px;
+    margin-top: 3rem;
     border-radius: 8px;
 }
 
@@ -203,7 +201,9 @@ body {
 }
 
 #preferences-input {
-    width: 100%;
+    display: flex;
+    justify-self: center;
+    width: 96%;
     padding: 10px;
     border: 1px solid #ddd;
     border-radius: 5px;
@@ -241,3 +241,72 @@ body {
   .delete-manga-btn:hover {
     background-color: #cc3700;
   }
+
+
+/* Estilos para o formulário de edição */
+#edit-profile-btn {
+    display: flex;
+    justify-self: end;
+    margin-top: -10%;
+    background-color: #ff4500;
+    color: white;
+    border: none;
+    border-radius: 5px;
+}
+
+#edit-profile-btn:hover {
+    background-color: #cc3700;
+}
+
+.edit-profile-form {
+    margin-top: 3rem;
+    padding: 20px;
+    border-radius: 8px;
+  }
+  
+  .edit-profile-label {
+    margin-top: 1rem;
+    color: white;
+    font-weight: bold;
+  }
+  
+  .edit-profile-imput {
+    width: fit-content;
+    padding: 1.5%;
+    margin-top: 1rem;
+    margin-left: 0.5rem;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    background-color: #333;
+    color: white;
+    resize: vertical;
+  }
+  
+  .edit-profile-submit, .edit-profile-cancel {
+    margin-top: 15px;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: bold;
+  }
+  
+  .edit-profile-submit {
+    background-color: #28a745; 
+    color: white;
+  }
+  
+  .edit-profile-submit:hover {
+    background-color: #218838;
+  }
+  
+  .edit-profile-cancel {
+    background-color: #6c757d; 
+    color: white;
+    margin-left: 10px;
+  }
+  
+  .edit-profile-cancel:hover {
+    background-color: #5a6268;
+  }
+  
