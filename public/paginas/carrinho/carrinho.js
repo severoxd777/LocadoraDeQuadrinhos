@@ -142,7 +142,7 @@ function updatePurchaseButton(cart) {
     newPurchaseBtn.classList.remove('btn-success');
     newPurchaseBtn.classList.add('btn-primary');
     newPurchaseBtn.addEventListener('click', () => {
-      window.location.href = '/index.html';
+      window.location.href = '/';
     });
   } else {
     newPurchaseBtn.textContent = 'Confirmar Compra';

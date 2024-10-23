@@ -39,14 +39,20 @@ app.get("/perfil", (req, res) => {
   );
 });
 
+app.get("/carrinho", (req, res) => {
+  res.sendFile(
+    path.join(__dirname, "public", "paginas", "carrinho", "carrinho.html")
+  );
+});
+
 // Adicionar rotas para as novas páginas
-app.get("/forgotPassword.html", (req, res) => {
+app.get("/forgotPassword", (req, res) => {
   res.sendFile(
     path.join(__dirname, "public", "paginas", "login", "forgotPassword.html")
   );
 });
 
-app.get("/setNewPassword.html", (req, res) => {
+app.get("/setNewPassword", (req, res) => {
   res.sendFile(
     path.join(__dirname, "public", "paginas", "login", "setNewPassword.html")
   );

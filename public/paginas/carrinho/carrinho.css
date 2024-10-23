@@ -1,201 +1,146 @@
 /* Estilos Gerais */
 body, html {
-    margin: 0;
-    padding: 0;
-    height: 100%;
-    font-family: "Arial", sans-serif;
-    background-color: #000; /* Fundo preto */
-    color: white; /* Texto branco */
-  }
-  
-  /* Navbar */
-  .navbar {
-    background-color: rgba(0, 0, 0, 0.9);
-    padding: 0;
-  }
-  
-  .navbar-brand, .nav-link {
-    color: #ffd700 !important; /* Links dourados */
-  }
-  
-  .navbar-nav .nav-item .nav-link.active {
-    color: #ff4500 !important; /* Link ativo em laranja */
-  }
-  
-  .navbar-nav .nav-link:hover {
-    color: #ff6347 !important; /* Laranja claro ao passar o mouse */
-  }
-  
-  .btn-outline-light {
-    border-color: #58ccf3;
-    color: #add8e6;
-  }
-  
-  .btn-outline-light:hover {
-    background-color: #444472;
-    border-color: #453f71;
-  }
-  
-  /* Container do Carrinho */
-  .container {
-    margin-top: 50px;
-  }
-  
-  h1 {
-    text-align: center;
-    font-family: "Comic Sans MS", cursive, sans-serif;
-    font-size: 3rem;
-    margin: 0;
-  }
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  font-family: "Arial", sans-serif;
+  background-color: #000; /* Fundo preto */
+  color: white; /* Texto branco */
+}
 
-  h2 {
-    text-align: center;
-    font-family: "Comic Sans MS", cursive, sans-serif;
-    color: gold;
-    margin: 0;
-  }
-  
-  /* Itens do Carrinho */
-  #cart-items {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: space-around;
-    gap: 20px;
-  }
-  
-  .cart-item {
-    flex: 0 0 30%;
-    max-width: 30%;
-    margin-bottom: 20px;
-    opacity: 0;
-    position: relative;
-    transition: opacity 1.2s ease-out, transform 1.6s ease-out;
-  }
-  
-  .cart-item.show {
-    opacity: 1;
-    transform: translate(0, 0);
-  }
-  
-  /* Animação para os itens do carrinho */
-  .cart-item.center {
-    transform: translateY(-100px);
-  }
-  
-  .cart-item.left {
-    transform: translate(-100px, 100px);
-  }
-  
-  .cart-item.right {
-    transform: translate(100px, 100px);
-  }
-  
-  /* Estilos do Card */
-  .card {
-    background-color: black;
-    border: 2px solid gold;
-    border-radius: 15px;    
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    text-align: center;
-    padding: 2%;            
-    margin-top: 10%;
-  }
+/* Container do Carrinho */
+.container {
+  margin-top: 50px;
+}
 
-  .card-grid {
-    max-width: 44%;
-  }
-  
-  .card-img-top {
-    max-width: fit-content;
-    border-radius: 4px;
-  }
-  
-  .card-body {
-    margin-left: 5%;        /* Adicionado do estilo inline */
-  }
-  
-  .card-title {
-    font-size: 1.5rem;
-    color: #ffd700; /* Dourado */
-    font-family: "Comic Sans MS", cursive, sans-serif;
-  }
-  
-  .card-text {
-    color: white;
-  }
-    
-  .btn {
-    margin-top: 1rem;
-    border-color: #58ccf3;
-    color: white;
-    border-radius: 5px;
-  }
-  
-  .btn:hover {
-    background-color: #444472;
-    border-color: #453f71;
-  }
-  
-  /* Botão Confirmar Compra */
-  #confirm-purchase-btn {
-    display: block;
-    margin: 20px auto;
-    padding: 10px 20px;
-    background-color: #28a745; /* Verde */
-    color: white;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    font-weight: bold;
-    margin-top: 4%;
-  }
-  
-  #confirm-purchase-btn:hover {
-    background-color: #218838;
-  }
-  
-  /* Rodapé */
-  footer {
-    background-color: rgba(128, 0, 128, 0.9);
-    color: #ffd700; /* Texto dourado */
-  }
-  
-  footer p {
-    margin: 0;
-  }
-  
-  /* Ajustes para o Botão Remover */
-  .remove-btn {
-    margin-top: 10px;
-    padding: 10px 20px;
-    background-color: #ff4500; /* Laranja */
-    color: white;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    font-weight: bold;
-  }
-  
-  .remove-btn:hover {
-    background-color: #cc3700;
-  }
+h1 {
+  text-align: center;
+  font-family: "Comic Sans MS", cursive, sans-serif;
+  font-size: 3rem;
+  margin: 0;
+}
 
-  .navbar {
-    background-color: rgba(0, 0, 0, 0.9); /* Navbar com fundo escuro */
-  }
-  
-  .navbar-brand, .nav-link {
-    color: #ffd700 !important; /* Links dourados */
-  }
-  
-  .navbar-nav .nav-item .nav-link.active {
-    color: #ff4500 !important; /* Link ativo laranja */
-  }
-  
-  .navbar-nav .nav-link:hover {
-    color: #ff6347 !important; /* Hover em laranja claro */
-  }
-  
+h2 {
+  text-align: center;
+  font-family: "Comic Sans MS", cursive, sans-serif;
+  color: gold;
+  margin: 0;
+}
+
+/* Itens do Carrinho */
+#cart-items {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-around;
+  gap: 20px;
+}
+
+.cart-item {
+  flex: 0 0 30%;
+  max-width: 30%;
+  margin-bottom: 20px;
+  opacity: 0;
+  position: relative;
+  transition: opacity 1.2s ease-out, transform 1.6s ease-out;
+}
+
+.cart-item.show {
+  opacity: 1;
+  transform: translate(0, 0);
+}
+
+/* Animação para os itens do carrinho */
+.cart-item.center {
+  transform: translateY(-100px);
+}
+
+.cart-item.left {
+  transform: translate(-100px, 100px);
+}
+
+.cart-item.right {
+  transform: translate(100px, 100px);
+}
+
+/* Estilos do Card */
+.card {
+  background-color: black;
+  border: 2px solid gold;
+  border-radius: 15px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  text-align: center;
+  padding: 2%;
+  margin-top: 10%;
+}
+
+.card-grid {
+  max-width: 44%;
+}
+
+.card-img-top {
+  max-width: fit-content;
+  border-radius: 4px;
+}
+
+.card-body {
+  margin-left: 5%;
+}
+
+.card-title {
+  font-size: 1.5rem;
+  color: #ffd700; /* Dourado */
+  font-family: "Comic Sans MS", cursive, sans-serif;
+}
+
+.card-text {
+  color: white;
+}
+
+.btn {
+  margin-top: 1rem;
+  border-color: #58ccf3;
+  color: white;
+  border-radius: 5px;
+}
+
+.btn:hover {
+  background-color: #444472;
+  border-color: #453f71;
+}
+
+/* Botão Confirmar Compra */
+#confirm-purchase-btn {
+  display: block;
+  margin: 20px auto;
+  padding: 10px 20px;
+  background-color: #28a745; /* Verde */
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-weight: bold;
+  margin-top: 4%;
+}
+
+#confirm-purchase-btn:hover {
+  background-color: #218838;
+}
+
+/* Ajustes para o Botão Remover */
+.remove-btn {
+  margin-top: 10px;
+  padding: 10px 20px;
+  background-color: #ff4500; /* Laranja */
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.remove-btn:hover {
+  background-color: #cc3700;
+}

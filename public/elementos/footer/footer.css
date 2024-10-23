@@ -1,0 +1,9 @@
+footer {
+    background-color: rgba(128, 0, 128, 0.9);
+    color: #ffd700; /* Texto do rodapé dourado */
+  }
+  
+  footer p {
+    margin: 0;
+  }
+  

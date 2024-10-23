@@ -1,3 +1,5 @@
+/* styles.css (ou index.css) */
+
 /* Estilo geral */
 body, html {
   margin: 0;
@@ -6,32 +8,6 @@ body, html {
   font-family: "Arial", sans-serif;
   background-color: #000; /* Fundo preto */
   color: white; /* Texto branco */
-}
-
-.navbar {
-  background-color: rgba(0, 0, 0, 0.9); /* Navbar com fundo escuro */
-}
-
-.navbar-brand, .nav-link {
-  color: #ffd700 !important; /* Links dourados */
-}
-
-.navbar-nav .nav-item .nav-link.active {
-  color: #ff4500 !important; /* Link ativo laranja */
-}
-
-.navbar-nav .nav-link:hover {
-  color: #ff6347 !important; /* Hover em laranja claro */
-}
-
-.btn-outline-light {
-  border-color: #58ccf3; 
-  color: #add8e6; 
-}
-
-.btn-outline-light:hover {
-  background-color: #444472; 
-  border-color: #453f71; 
 }
 
 /* Estilo do Banner */
@@ -116,22 +92,12 @@ p {
 
 #manga-list .btn {
   margin-top: 1rem;
-  border-color: #58ccf3; 
+  border-color: #58ccf3;
   color: white;
   border-radius: 5px;
 }
 
 #manga-list .btn:hover {
-  background-color: #444472; 
-  border-color: #453f71; 
-}
-
-/* Rodapé */
-footer {
-  background-color: rgba(128, 0, 128, 0.9);
-  color: #ffd700; /* Texto do rodapé dourado */
-}
-
-footer p {
-  margin: 0;
+  background-color: #444472;
+  border-color: #453f71;
 }

@@ -49,7 +49,7 @@
               </div>
             </form>
             <div class="text-center mt-3">
-              <a href="./forgotPassword.html" class="text-light">Esqueceu sua senha?</a>
+              <a href="/forgotPassword" class="text-light">Esqueceu sua senha?</a>
             </div>
           </div>
         </div>
@@ -82,7 +82,7 @@
     
             if (result.passwordReset) {
               alert("Sua senha foi redefinida. Por favor, defina uma nova senha.");
-              window.location.href = "/setNewPassword.html"; // Redireciona para a página de definição de nova senha
+              window.location.href = "/setNewPassword"; // Redireciona para a página de definição de nova senha
             } else {
               alert("Login bem-sucedido!");
               window.location.href = "/perfil"; // Redireciona para a página de perfil
