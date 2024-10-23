@@ -109,7 +109,7 @@ function displayManga(mangas) {
     // Adicionar listener ao botão "Adicionar"
     const addButton = mangaCard.querySelector('.add-manga-btn');
     addButton.addEventListener('click', () => {
-      addMangaToUser(manga.mal_id);
+      addMangaToCart(manga.mal_id);
     });
 
     // Usar IntersectionObserver para ativar a animação quando o card entrar no viewport
@@ -117,33 +117,21 @@ function displayManga(mangas) {
   });
 }
 
-// Função para adicionar o mangá ao usuário
-function addMangaToUser(mangaId) {
+function addMangaToCart(mangaId) {
   const userId = sessionStorage.getItem('usuarioId');
   if (!userId) {
-    alert('Você precisa estar logado para adicionar um mangá.');
+    alert('Você precisa estar logado para adicionar um mangá ao carrinho.');
     return;
   }
 
-  fetch(`/usuarios/${userId}/mangas`, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json'
-    },
-    body: JSON.stringify({ mangaId })
-  })
-    .then(response => response.json())
-    .then(data => {
-      if (data.message) {
-        alert(data.message);
-      } else {
-        alert('Mangá adicionado com sucesso!');
-      }
-    })
-    .catch(error => {
-      console.error('Erro ao adicionar mangá:', error);
-      alert('Erro ao adicionar mangá');
-    });
+  let cart = JSON.parse(sessionStorage.getItem('cart')) || [];
+  if (!cart.includes(mangaId)) {
+    cart.push(mangaId);
+    sessionStorage.setItem('cart', JSON.stringify(cart));
+    alert('Mangá adicionado ao carrinho!');
+  } else {
+    alert('Mangá já está no carrinho.');
+  }
 }
 
 // Função para ativar a animação quando o mangá entra no viewport

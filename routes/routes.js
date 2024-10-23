@@ -27,6 +27,44 @@ function generateRandomPassword(length) {
   return password;
 }
 
+// Rota POST para adicionar múltiplos mangás ao usuário
+router.post("/:userId/mangas/bulk", async (req, res) => {
+  const { userId } = req.params;
+  const { mangaIds } = req.body;
+
+  if (!Array.isArray(mangaIds) || mangaIds.length === 0) {
+    return res.status(400).json({ message: "Nenhum mangá foi fornecido." });
+  }
+
+  try {
+    // Verifica se o usuário existe
+    const userResult = await pool.query("SELECT * FROM usuarios WHERE id = $1", [userId]);
+
+    if (userResult.rows.length === 0) {
+      return res.status(404).json({ message: "Usuário não encontrado" });
+    }
+
+    // Preparar inserção dos mangás
+    const values = [];
+    mangaIds.forEach((mangaId, index) => {
+      values.push(`($1, $${index + 2})`);
+    });
+
+    const query = `
+      INSERT INTO user_mangas (user_id, manga_id)
+      VALUES ${values.join(',')}
+      ON CONFLICT DO NOTHING
+    `;
+
+    await pool.query(query, [userId, ...mangaIds]);
+
+    res.status(200).json({ message: "Mangás adicionados com sucesso!" });
+  } catch (error) {
+    console.error('Erro ao adicionar mangás:', error);
+    res.status(500).json({ message: 'Erro ao adicionar mangás' });
+  }
+});
+
 // Rota POST para criar um novo usuário
 router.post("/", async (req, res) => {
   const { nome, email, senha, isAdminPassword } = req.body;
@@ -248,6 +286,61 @@ router.delete("/:userId/mangas/:mangaId", async (req, res) => {
     res.status(500).json({ message: "Erro ao remover mangá do usuário" });
   }
 });
+
+// Rota GET para obter informações do usuário
+router.get("/perfil/:id", async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    // Verifica se o usuário existe
+    const userResult = await pool.query("SELECT * FROM usuarios WHERE id = $1", [id]);
+
+    if (userResult.rows.length === 0) {
+      return res.status(404).json({ message: "Usuário não encontrado" });
+    }
+
+    const user = userResult.rows[0];
+
+    res.status(200).json({
+      id: user.id,
+      nome: user.nome,
+      email: user.email,
+      foto_perfil: user.foto_perfil,
+      preferencias_leitura: user.preferencias_leitura,
+    });
+  } catch (error) {
+    console.error("Erro ao obter informações do usuário:", error);
+    res.status(500).json({ message: "Erro ao obter informações do usuário" });
+  }
+});
+
+// Rota GET para obter os mangás do usuário
+router.get("/:userId/mangas", async (req, res) => {
+  const { userId } = req.params;
+
+  try {
+    // Verifica se o usuário existe
+    const userResult = await pool.query("SELECT * FROM usuarios WHERE id = $1", [userId]);
+
+    if (userResult.rows.length === 0) {
+      return res.status(404).json({ message: "Usuário não encontrado" });
+    }
+
+    // Obtém os IDs dos mangás associados ao usuário
+    const mangasResult = await pool.query(
+      "SELECT manga_id FROM user_mangas WHERE user_id = $1",
+      [userId]
+    );
+
+    const mangaIds = mangasResult.rows.map(row => row.manga_id);
+
+    res.status(200).json({ mangaIds });
+  } catch (error) {
+    console.error("Erro ao obter mangás do usuário:", error);
+    res.status(500).json({ message: "Erro ao obter mangás do usuário" });
+  }
+});
+
 
 // Rota GET para buscar todos os usuários (apenas para administradores)
 router.get("/admin/usuarios", verificarAdmin, async (req, res) => {
