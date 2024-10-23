@@ -10,7 +10,8 @@ const createTables = async () => {
         senha VARCHAR(255) NOT NULL,
         foto_perfil TEXT,
         preferencias_leitura TEXT DEFAULT '"Naruto", "Dragon Ball", "Jujutsu"',
-        is_admin BOOLEAN DEFAULT FALSE
+        is_admin BOOLEAN DEFAULT FALSE,
+        password_reset BOOLEAN DEFAULT FALSE
       );
 
       CREATE TABLE IF NOT EXISTS perfis_acesso (

@@ -16,7 +16,7 @@ app.use(express.static(path.join(__dirname, "public")));
 // Usar as rotas de usuários
 app.use("/usuarios", usuarioRoutes);
 
-// Configurar as rotas de páginas estáticas
+// Rotas para servir páginas HTML
 app.get("/", (req, res) => {
   res.sendFile(path.join(__dirname, "public", "index.html"));
 });
@@ -36,6 +36,19 @@ app.get("/registrar", (req, res) => {
 app.get("/perfil", (req, res) => {
   res.sendFile(
     path.join(__dirname, "public", "paginas", "perfil", "perfil.html")
+  );
+});
+
+// Adicionar rotas para as novas páginas
+app.get("/forgotPassword.html", (req, res) => {
+  res.sendFile(
+    path.join(__dirname, "public", "paginas", "login", "forgotPassword.html")
+  );
+});
+
+app.get("/setNewPassword.html", (req, res) => {
+  res.sendFile(
+    path.join(__dirname, "public", "paginas", "login", "setNewPassword.html")
   );
 });
 
