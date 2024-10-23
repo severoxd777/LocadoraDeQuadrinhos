@@ -1,3 +1,12 @@
+html {
+  background: url("https://wallpaperaccess.com/full/794672.jpg") no-repeat center center fixed;
+  background-size: cover;
+}
+
+body {
+  background: none !important;
+}
+
 /* Estilo do Banner */
 .bg-dark {
   background-color: rgba(0, 0, 0, 0.8); /* Fundo preto com opacidade */
@@ -19,8 +28,8 @@
   flex-wrap: wrap;
 }
 .card {
-  background-color: black;
-  border: 2px solid gold;
+  background-color: rgba(0, 0, 0, 0.85);
+  border: 3px solid gold;
   border-radius: 15px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.5); /* Sombra */
   display: flex;
