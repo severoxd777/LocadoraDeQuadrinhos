@@ -9,6 +9,11 @@ body, html {
   body {
     background: none;
   }
+
+  html {
+    background: url("https://wallpaperaccess.com/full/44729.jpg") no-repeat center center fixed;
+    background-size: cover;
+  }
   
   .text-light {
     color: white;
