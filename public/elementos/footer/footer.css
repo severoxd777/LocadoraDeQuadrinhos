@@ -1,9 +1,13 @@
 footer {
-    background-color: rgba(128, 0, 128, 0.9);
-    color: #ffd700; /* Texto do rodapé dourado */
+  background-color: rgba(0, 0, 0, 0.9) !important;
+  color: white !important;
+  text-align: center !important;
+  padding: 10px !important;
+  margin-top: 3rem !important;
   }
   
   footer p {
-    margin: 0;
+    margin: 0 !important;
+    font-family: "Comic Sans MS", cursive, sans-serif !important; 
   }
   

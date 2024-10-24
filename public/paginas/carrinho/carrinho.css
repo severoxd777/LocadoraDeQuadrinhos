@@ -1,3 +1,8 @@
+html {
+  background: url("https://wallpaperaccess.com/full/44729.jpg") no-repeat center center fixed;
+  background-size: cover;
+}
+
 /* Container do Carrinho */
 .container {
   margin-top: 50px;
@@ -40,7 +45,7 @@
 
 /* Estilos do Card */
 .card {
-  background-color: black;
+  background-color: rgba(0, 0, 0, 0.85);
   border: 2px solid gold;
   border-radius: 15px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
@@ -91,14 +96,16 @@
 #confirm-purchase-btn {
   display: block;
   margin: 20px auto;
-  padding: 10px 20px;
   background-color: #28a745; /* Verde */
   color: white;
   border: none;
-  border-radius: 5px;
   cursor: pointer;
   font-weight: bold;
   margin-top: 4%;
+
+  padding: 1.5rem;
+  font-size: 2rem;
+  border-radius: 15px;
 }
 
 #confirm-purchase-btn:hover {
@@ -119,4 +126,12 @@
 
 .remove-btn:hover {
   background-color: #cc3700;
+}
+
+.allert {
+  background-color: rgba(0, 0, 0, 0.85);
+  max-width: fit-content;
+  padding: 1rem;
+  border-radius: 15px;
+  border: 2px solid gold;
 }

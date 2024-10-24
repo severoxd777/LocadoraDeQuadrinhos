@@ -13,7 +13,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   updatePurchaseButton(cart);
 
   if (cart.length === 0) {
-    cartItemsDiv.innerHTML = '<h2>Seu carrinho está vazio.</h2>';
+    cartItemsDiv.innerHTML = '<h2 class="allert">Seu carrinho está vazio.</h2>';
     return;
   }
 
@@ -82,7 +82,7 @@ function removeFromCart(mangaId, mangaCard) {
   mangaCard.remove();
 
   if (cart.length === 0) {
-    document.getElementById('cart-items').innerHTML = '<h2>Seu carrinho está vazio.</h2>';
+    document.getElementById('cart-items').innerHTML = '<h2 class="allert">Seu carrinho está vazio.</h2>';
   }
 
   // Atualiza o botão após remover um mangá
@@ -95,7 +95,7 @@ async function confirmPurchase() {
 
   if (!userId) {
     alert('Você precisa estar logado para confirmar a compra.');
-    window.location.href = '/paginas/login/login.html';
+    window.location.href = '/login';
     return;
   }
 
@@ -120,7 +120,7 @@ async function confirmPurchase() {
       // Limpar o carrinho
       sessionStorage.removeItem('cart');
       // Redirecionar para o perfil ou atualizar a página conforme necessário
-      window.location.href = '/paginas/perfil/perfil.html';
+      window.location.href = '/perfil';
     } else {
       alert(data.message || 'Erro ao confirmar a compra');
     }

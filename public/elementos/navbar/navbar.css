@@ -1,5 +1,5 @@
 .navbar {
-    background-color: rgba(0, 0, 0, 0.9); /* Navbar com fundo escuro */
+    background-color: rgba(0, 0, 0, 0.9) !important; /* Navbar com fundo escuro */
   }
   
   .navbar-brand, .nav-link {
@@ -15,12 +15,12 @@
   }
   
   .btn-outline-light {
-    border-color: #58ccf3;
-    color: #add8e6;
+    border-color: #58ccf3 !important;
+    color: #add8e6 !important;
   }
   
   .btn-outline-light:hover {
-    background-color: #444472;
-    border-color: #453f71;
+    background-color: #444472 !important;
+    border-color: #453f71 !important;
   }
   

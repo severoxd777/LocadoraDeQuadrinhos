@@ -25,6 +25,7 @@ html {
 .btn-primary {
   background-color: #ff4500; /* Laranja */
   border-color: #ff4500;
+  margin: 1rem 0 1rem 0;
 }
 
 .btn-primary:hover {

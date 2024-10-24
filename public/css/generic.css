@@ -3,8 +3,11 @@ body, html {
     padding: 0;
     height: 100%;
     font-family: "Arial", sans-serif;
-    background-color: #000;
     color: white;
+  }
+
+  body {
+    background: none;
   }
   
   .text-light {
@@ -24,7 +27,8 @@ body, html {
     margin: 0;
   }
   
-  .container {
-    margin-top: 50px;
+  .banner{
+    background-color: rgba(0, 0, 0, 0.9) !important;
+    text-align: center !important;
+    padding-bottom: 1.5rem !important;
   }
-  
