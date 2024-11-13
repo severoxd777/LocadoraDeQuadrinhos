@@ -1,12 +1,12 @@
-require('dotenv').config();
+require("dotenv").config();
 const express = require("express");
 const pool = require("../banco/db");
-const nodemailer = require('nodemailer'); // Importar Nodemailer
+const nodemailer = require("nodemailer"); // Importar Nodemailer
 const router = express.Router();
 
 // Configuração do transporter do Nodemailer
 const transporter = nodemailer.createTransport({
-  host: process.env.EMAIL_HOST || 'smtp.gmail.com',
+  host: process.env.EMAIL_HOST || "smtp.gmail.com",
   port: 587, // Porta para TLS
   secure: false, // true para 465, false para outras portas
   auth: {
@@ -19,8 +19,9 @@ const transporter = nodemailer.createTransport({
 
 // Função para gerar uma senha aleatória
 function generateRandomPassword(length) {
-  const chars = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
-  let password = '';
+  const chars =
+    "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+  let password = "";
   for (let i = 0; i < length; i++) {
     password += chars.charAt(Math.floor(Math.random() * chars.length));
   }
@@ -91,7 +92,10 @@ router.post("/forgot-password", async (req, res) => {
 
   try {
     // Verifica se o usuário existe
-    const userResult = await pool.query("SELECT * FROM usuarios WHERE email = $1", [email]);
+    const userResult = await pool.query(
+      "SELECT * FROM usuarios WHERE email = $1",
+      [email]
+    );
 
     if (userResult.rows.length === 0) {
       return res.status(404).json({ message: "Email não encontrado" });
@@ -103,13 +107,16 @@ router.post("/forgot-password", async (req, res) => {
     const tempPassword = generateRandomPassword(8);
 
     // Atualiza a senha no banco de dados e define password_reset como true
-    await pool.query("UPDATE usuarios SET senha = $1, password_reset = $2 WHERE id = $3", [tempPassword, true, user.id]);
+    await pool.query(
+      "UPDATE usuarios SET senha = $1, password_reset = $2 WHERE id = $3",
+      [tempPassword, true, user.id]
+    );
 
     // Configura o email
     const mailOptions = {
       from: process.env.EMAIL_USER,
       to: email,
-      subject: 'Recuperação de Senha - Biblioteca de Mangás',
+      subject: "Recuperação de Senha - Biblioteca de Mangás",
       text: `Olá ${user.nome},
 
 Sua senha foi redefinida. Sua nova senha temporária é: ${tempPassword}
@@ -124,13 +131,16 @@ Equipe da Biblioteca de Mangás`,
     transporter.sendMail(mailOptions, (error, info) => {
       if (error) {
         console.error("Erro ao enviar email de recuperação:", error);
-        return res.status(500).json({ message: "Erro ao enviar email de recuperação" });
+        return res
+          .status(500)
+          .json({ message: "Erro ao enviar email de recuperação" });
       } else {
         console.log("Email de recuperação enviado:", info.response);
-        return res.status(200).json({ message: "Email de recuperação enviado com sucesso" });
+        return res
+          .status(200)
+          .json({ message: "Email de recuperação enviado com sucesso" });
       }
     });
-
   } catch (error) {
     console.error("Erro ao processar recuperação de senha:", error);
     res.status(500).json({ message: "Erro ao processar recuperação de senha" });
@@ -148,7 +158,10 @@ router.put("/:id/set-password", async (req, res) => {
 
   try {
     // Verifica se o usuário existe
-    const userResult = await pool.query("SELECT * FROM usuarios WHERE id = $1", [id]);
+    const userResult = await pool.query(
+      "SELECT * FROM usuarios WHERE id = $1",
+      [id]
+    );
 
     if (userResult.rows.length === 0) {
       return res.status(404).json({ message: "Usuário não encontrado" });
@@ -169,12 +182,17 @@ router.put("/:id/set-password", async (req, res) => {
 
 // Middleware para verificar se o usuário é administrador
 function verificarAdmin(req, res, next) {
-  const isAdmin = req.headers['isadmin'];
+  const isAdmin = req.headers["isadmin"];
 
-  if (isAdmin === 'true') {
+  if (isAdmin === "true") {
     next();
   } else {
-    res.status(403).json({ message: "Acesso negado. Apenas administradores podem acessar esta rota." });
+    res
+      .status(403)
+      .json({
+        message:
+          "Acesso negado. Apenas administradores podem acessar esta rota.",
+      });
   }
 }
 
@@ -184,7 +202,10 @@ router.delete("/admin/usuarios/:id", verificarAdmin, async (req, res) => {
 
   try {
     // Verifica se o usuário existe
-    const userResult = await pool.query("SELECT * FROM usuarios WHERE id = $1", [id]);
+    const userResult = await pool.query(
+      "SELECT * FROM usuarios WHERE id = $1",
+      [id]
+    );
 
     if (userResult.rows.length === 0) {
       return res.status(404).json({ message: "Usuário não encontrado" });
@@ -204,7 +225,9 @@ router.delete("/admin/usuarios/:id", verificarAdmin, async (req, res) => {
 router.delete("/:userId/mangas/:mangaId", async (req, res) => {
   let { userId, mangaId } = req.params;
 
-  console.log(`Recebida solicitação para deletar o mangá ${mangaId} do usuário ${userId}`);
+  console.log(
+    `Recebida solicitação para deletar o mangá ${mangaId} do usuário ${userId}`
+  );
 
   // Converter IDs para inteiros
   userId = parseInt(userId, 10);
@@ -217,7 +240,10 @@ router.delete("/:userId/mangas/:mangaId", async (req, res) => {
 
   try {
     // Verifica se o usuário existe
-    const userResult = await pool.query("SELECT * FROM usuarios WHERE id = $1", [userId]);
+    const userResult = await pool.query(
+      "SELECT * FROM usuarios WHERE id = $1",
+      [userId]
+    );
 
     if (userResult.rows.length === 0) {
       console.error("Usuário não encontrado.");
@@ -232,7 +258,9 @@ router.delete("/:userId/mangas/:mangaId", async (req, res) => {
 
     if (userMangaResult.rows.length === 0) {
       console.error("Mangá não encontrado no perfil do usuário.");
-      return res.status(404).json({ message: "Mangá não encontrado no perfil do usuário" });
+      return res
+        .status(404)
+        .json({ message: "Mangá não encontrado no perfil do usuário" });
     }
 
     // Remove o mangá do perfil do usuário
@@ -242,7 +270,9 @@ router.delete("/:userId/mangas/:mangaId", async (req, res) => {
     );
 
     console.log("Mangá removido com sucesso.");
-    res.status(200).json({ message: "Mangá removido com sucesso do perfil do usuário" });
+    res
+      .status(200)
+      .json({ message: "Mangá removido com sucesso do perfil do usuário" });
   } catch (error) {
     console.error("Erro ao remover mangá do usuário", error);
     res.status(500).json({ message: "Erro ao remover mangá do usuário" });
@@ -252,7 +282,9 @@ router.delete("/:userId/mangas/:mangaId", async (req, res) => {
 // Rota GET para buscar todos os usuários (apenas para administradores)
 router.get("/admin/usuarios", verificarAdmin, async (req, res) => {
   try {
-    const result = await pool.query("SELECT id, nome, email, foto_perfil, preferencias_leitura FROM usuarios");
+    const result = await pool.query(
+      "SELECT id, nome, email, foto_perfil, preferencias_leitura FROM usuarios"
+    );
     res.status(200).json(result.rows);
   } catch (error) {
     console.error("Erro ao buscar todos os usuários", error);
@@ -267,7 +299,10 @@ router.put("/perfil/:id", async (req, res) => {
 
   try {
     // Verifica se o usuário existe
-    const userResult = await pool.query("SELECT * FROM usuarios WHERE id = $1", [id]);
+    const userResult = await pool.query(
+      "SELECT * FROM usuarios WHERE id = $1",
+      [id]
+    );
 
     if (userResult.rows.length === 0) {
       return res.status(404).json({ message: "Usuário não encontrado" });
@@ -282,7 +317,9 @@ router.put("/perfil/:id", async (req, res) => {
     res.status(200).json({ message: "Preferências atualizadas com sucesso" });
   } catch (error) {
     console.error("Erro ao atualizar preferências do usuário", error);
-    res.status(500).json({ message: "Erro ao atualizar preferências do usuário" });
+    res
+      .status(500)
+      .json({ message: "Erro ao atualizar preferências do usuário" });
   }
 });
 
@@ -293,7 +330,10 @@ router.put("/:id", async (req, res) => {
 
   try {
     // Verifica se o usuário existe
-    const userResult = await pool.query("SELECT * FROM usuarios WHERE id = $1", [id]);
+    const userResult = await pool.query(
+      "SELECT * FROM usuarios WHERE id = $1",
+      [id]
+    );
 
     if (userResult.rows.length === 0) {
       return res.status(404).json({ message: "Usuário não encontrado" });
@@ -319,7 +359,12 @@ router.put("/:id", async (req, res) => {
     // Atualização da senha
     if (currentPassword || newPassword) {
       if (!currentPassword || !newPassword) {
-        return res.status(400).json({ message: "Para alterar a senha, forneça a senha atual e a nova senha" });
+        return res
+          .status(400)
+          .json({
+            message:
+              "Para alterar a senha, forneça a senha atual e a nova senha",
+          });
       }
 
       if (currentPassword !== user.senha) {
@@ -331,12 +376,16 @@ router.put("/:id", async (req, res) => {
     }
 
     if (updateFields.length === 0) {
-      return res.status(400).json({ message: "Nenhuma alteração foi fornecida" });
+      return res
+        .status(400)
+        .json({ message: "Nenhuma alteração foi fornecida" });
     }
 
     updateValues.push(id); // Adiciona o ID para a cláusula WHERE
 
-    const updateQuery = `UPDATE usuarios SET ${updateFields.join(', ')} WHERE id = $${paramIndex}`;
+    const updateQuery = `UPDATE usuarios SET ${updateFields.join(
+      ", "
+    )} WHERE id = $${paramIndex}`;
 
     await pool.query(updateQuery, updateValues);
 
