@@ -1,0 +1,13 @@
+footer {
+  background-color: rgba(0, 0, 0, 0.9) !important;
+  color: white !important;
+  text-align: center !important;
+  padding: 10px !important;
+  margin-top: 3rem !important;
+  }
+  
+  footer p {
+    margin: 0 !important;
+    font-family: "Comic Sans MS", cursive, sans-serif !important; 
+  }
+  

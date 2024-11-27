@@ -1,0 +1,39 @@
+body, html {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    font-family: "Arial", sans-serif;
+    color: white;
+  }
+
+  body {
+    background: none;
+  }
+
+  html {
+    background: url("https://wallpaperaccess.com/full/44729.jpg") no-repeat center center fixed;
+    background-size: cover;
+  }
+  
+  .text-light {
+    color: white;
+  }
+  
+  h1 {
+    font-family: "Comic Sans MS", cursive, sans-serif; 
+    margin: 0;
+    font-size: 3rem;
+  }
+
+  h2 {
+    text-align: center;
+    font-family: "Comic Sans MS", cursive, sans-serif;
+    color: gold;
+    margin: 0;
+  }
+  
+  .banner{
+    background-color: rgba(0, 0, 0, 0.9) !important;
+    text-align: center !important;
+    padding-bottom: 1.5rem !important;
+  }

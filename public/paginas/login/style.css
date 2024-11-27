@@ -6,9 +6,8 @@ html {
   font-family: "Arial", sans-serif;
 }
 
-.login-page {
-  background: url("https://assetsio.gnwcdn.com/I-wanted-an-ELDEN-RING-Anime-so-I-made-it-myself-_-REDRAW-COLLAB-3-48-screenshot.png?width=1600&height=900&fit=crop&quality=100&format=png&enable=upscale&auto=webp")
-    no-repeat center center fixed;
+html {
+  background: url("https://assetsio.gnwcdn.com/I-wanted-an-ELDEN-RING-Anime-so-I-made-it-myself-_-REDRAW-COLLAB-3-48-screenshot.png?width=1600&height=900&fit=crop&quality=100&format=png&enable=upscale&auto=webp") no-repeat center center fixed;
   background-size: cover;
   height: 100%;
 }
@@ -25,6 +24,7 @@ html {
 .btn-primary {
   background-color: #ff4500; /* Laranja */
   border-color: #ff4500;
+  margin: 1rem 0 1rem 0;
 }
 
 .btn-primary:hover {

@@ -16,5 +16,5 @@ COPY . .
 # Expor a porta 3000
 EXPOSE 3000
 
-# Comando para rodar o servidor
-CMD ["node", "server.js"]
+# Comando para rodar o servidor usando o script 'start'
+CMD ["npm", "start"]

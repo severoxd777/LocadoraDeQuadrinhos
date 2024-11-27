@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <title>Carrinho de Compras</title>
+  <link
+    href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+    rel="stylesheet"
+  />
+  <link href="/paginas/carrinho/carrinho.css" rel="stylesheet">
+  <link href="/css/generic.css" rel="stylesheet" />
+</head>
+<body>
+  <!-- Placeholder para a navbar -->
+  <div id="navbar-placeholder"></div>
+
+    <!-- Banner -->
+    <div class="banner">
+      <h1>Carrinho de Compras</h1>
+      <p style="font-family: Comic Sans MS, cursive, sans-serif; margin: 0; font-size: 1.5rem;">Confirme os itens selecionados ou remova-os!</p>
+    </div>
+
+
+  <div class="container mt-5">
+    <div id="cart-items" class="row">
+      <!-- Os itens do carrinho serão exibidos aqui -->
+    </div>
+    <button id="confirm-purchase-btn" class="btn btn-success">Confirmar Compra</button>
+  </div>
+
+    <!-- Placeholder para o rodapé -->
+    <div id="footer-placeholder"></div>
+
+  <!-- Scripts -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="/paginas/carrinho/carrinho.js"></script>
+  <script src="/js/background.js"></script>
+  <script src="/elementos/navbar/navbar.js"></script>
+  <script src="/elementos/footer/footer.js"></script>
+  <script>
+    loadNavbar();
+    loadFooter();
+  </script>
+  </body>
+</html>

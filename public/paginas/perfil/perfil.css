@@ -5,7 +5,7 @@ body, html {
     font-family: "Arial", sans-serif;
 }
 
-body {
+html {
     background: url("https://wallpaperaccess.com/full/1097652.jpg") no-repeat center center fixed;
     background-size: cover;
 }

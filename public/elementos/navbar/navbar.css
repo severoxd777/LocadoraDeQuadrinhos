@@ -1,0 +1,26 @@
+.navbar {
+    background-color: rgba(0, 0, 0, 0.9) !important; /* Navbar com fundo escuro */
+  }
+  
+  .navbar-brand, .nav-link {
+    color: #ffd700 !important; /* Links dourados */
+  }
+  
+  .navbar-nav .nav-item .nav-link.active {
+    color: #ff4500 !important; /* Link ativo em laranja */
+  }
+  
+  .navbar-nav .nav-link:hover {
+    color: #ff6347 !important; /* Hover em laranja claro */
+  }
+  
+  .btn-outline-light {
+    border-color: #58ccf3 !important;
+    color: #add8e6 !important;
+  }
+  
+  .btn-outline-light:hover {
+    background-color: #444472 !important;
+    border-color: #453f71 !important;
+  }
+  

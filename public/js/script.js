@@ -25,6 +25,7 @@ async function fetchMangas(queries) {
   mangaList.innerHTML = ""; // Limpar a lista antes de adicionar novos itens
 
   const displayedMangas = new Set(); // Armazena IDs de mangás já exibidos
+  const allMangas = []; // Array para armazenar todos os mangás únicos
 
   for (const query of queries) {
     try {
@@ -34,7 +35,7 @@ async function fetchMangas(queries) {
       // Limitar os resultados aos 10 primeiros mais relevantes
       const topResults = data.data.slice(0, 10);
 
-      // Filtrar os resultados para não exibir mangás repetidos
+      // Filtrar os resultados para não incluir mangás repetidos
       const uniqueMangas = topResults.filter((manga) => {
         if (!displayedMangas.has(manga.mal_id)) {
           displayedMangas.add(manga.mal_id); // Adiciona o ID ao Set
@@ -43,20 +44,40 @@ async function fetchMangas(queries) {
         return false;
       });
 
-      displayManga(uniqueMangas); // Exibir os mangás únicos na página
+      // Adicionar os mangás únicos ao array global
+      allMangas.push(...uniqueMangas);
     } catch (error) {
       console.error(`Erro ao buscar mangá ${query}:`, error);
     }
   }
+
+  // Após coletar todos os mangás, exibi-los de uma vez
+  displayManga(allMangas);
 }
 
-// Função para truncar a sinopse até o tamanho máximo de 200 caracteres ou até o ponto final de uma frase
-function truncateSynopsis(synopsis) {
+// Nova função para truncar o título
+function truncateTitle(title) {
+  const maxLength = 60; // Defina o limite de caracteres desejado para o título
+
+  if (title.length <= maxLength) {
+    return title;
+  } else {
+    return title.substring(0, maxLength) + "...";
+  }
+}
+
+// Função para truncar a sinopse até o tamanho máximo de 100 caracteres ou até o ponto final de uma frase
+function truncateSynopsis(synopsis, titleLength) {
   if (!synopsis) {
     return "Descrição não disponível";
   }
 
-  const maxLength = 150; // Definir o limite de caracteres
+  let maxLength = 100; // Tamanho padrão da sinopse
+
+  // Reduz o tamanho da sinopse se o título for muito longo
+  if (titleLength > 60) {
+    maxLength = 80; // Reduz o tamanho máximo da sinopse
+  }
 
   // Se o tamanho da sinopse for menor que o limite, não truncar
   if (synopsis.length <= maxLength) {
@@ -79,12 +100,13 @@ function displayManga(mangas) {
   const userId = sessionStorage.getItem('usuarioId'); // Obtém o ID do usuário logado
 
   mangas.forEach((manga, index) => {
-    const truncatedSynopsis = truncateSynopsis(manga.synopsis);
+    const truncatedTitle = truncateTitle(manga.title); // Truncar o título se necessário
+    const truncatedSynopsis = truncateSynopsis(manga.synopsis, truncatedTitle.length); // Passar o tamanho do título truncado
 
     const mangaCard = document.createElement('div');
-    mangaCard.classList.add('manga-card', 'col-md-4', 'card');
+    mangaCard.classList.add('manga-card', 'card-grid');
 
-    // Determinar a posição inicial dos cartões
+    // Determinar a posição inicial dos cartões usando o índice global
     if (index % 3 === 0) {
       mangaCard.classList.add('left');
     } else if (index % 3 === 1) {
@@ -94,10 +116,10 @@ function displayManga(mangas) {
     }
 
     mangaCard.innerHTML = `
-      <div class="card mb-4 shadow-sm">
+      <div class="card shadow-sm">
         <img src="${manga.images.jpg.image_url}" class="card-img-top" alt="${manga.title}">
         <div class="card-body">
-          <h5 class="card-title">${manga.title}</h5>
+          <h5 class="card-title" title="${manga.title}">${truncatedTitle}</h5>
           <p class="card-text">${truncatedSynopsis}</p>
           <button class="btn btn-primary add-manga-btn" data-manga-id="${manga.mal_id}">Adicionar</button>
         </div>
@@ -109,7 +131,7 @@ function displayManga(mangas) {
     // Adicionar listener ao botão "Adicionar"
     const addButton = mangaCard.querySelector('.add-manga-btn');
     addButton.addEventListener('click', () => {
-      addMangaToUser(manga.mal_id);
+      addMangaToCart(manga.mal_id);
     });
 
     // Usar IntersectionObserver para ativar a animação quando o card entrar no viewport
@@ -117,33 +139,22 @@ function displayManga(mangas) {
   });
 }
 
-// Função para adicionar o mangá ao usuário
-function addMangaToUser(mangaId) {
+// Função para adicionar o mangá ao carrinho
+function addMangaToCart(mangaId) {
   const userId = sessionStorage.getItem('usuarioId');
   if (!userId) {
-    alert('Você precisa estar logado para adicionar um mangá.');
+    alert('Você precisa estar logado para adicionar um mangá ao carrinho.');
     return;
   }
 
-  fetch(`/usuarios/${userId}/mangas`, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json'
-    },
-    body: JSON.stringify({ mangaId })
-  })
-    .then(response => response.json())
-    .then(data => {
-      if (data.message) {
-        alert(data.message);
-      } else {
-        alert('Mangá adicionado com sucesso!');
-      }
-    })
-    .catch(error => {
-      console.error('Erro ao adicionar mangá:', error);
-      alert('Erro ao adicionar mangá');
-    });
+  let cart = JSON.parse(sessionStorage.getItem('cart')) || [];
+  if (!cart.includes(mangaId)) {
+    cart.push(mangaId);
+    sessionStorage.setItem('cart', JSON.stringify(cart));
+    alert('Mangá adicionado ao carrinho!');
+  } else {
+    alert('Mangá já está no carrinho.');
+  }
 }
 
 // Função para ativar a animação quando o mangá entra no viewport
@@ -174,7 +185,7 @@ document.addEventListener('DOMContentLoaded', async () => {
       const user = await response.json();
 
       if (response.ok && user.preferencias_leitura) {
-        // Se o usuário tiver preferências, utiliza-las como consultas
+        // Se o usuário tiver preferências, utilizá-las como consultas
         queries = parsePreferences(user.preferencias_leitura);
       }
     } catch (error) {

@@ -1,8 +1,69 @@
 require('dotenv').config();
 const express = require("express");
 const pool = require("../banco/db");
+const nodemailer = require('nodemailer'); // Importar Nodemailer
 const router = express.Router();
 
+// Configuração do transporter do Nodemailer
+const transporter = nodemailer.createTransport({
+  host: process.env.EMAIL_HOST || 'smtp.gmail.com',
+  port: 587, // Porta para TLS
+  secure: false, // true para 465, false para outras portas
+  auth: {
+    user: process.env.EMAIL_USER, // 'severonuvem@gmail.com'
+    pass: process.env.EMAIL_PASS, // Senha do app ou senha do Gmail
+  },
+  logger: true,
+  debug: true,
+});
+
+// Função para gerar uma senha aleatória
+function generateRandomPassword(length) {
+  const chars = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+  let password = '';
+  for (let i = 0; i < length; i++) {
+    password += chars.charAt(Math.floor(Math.random() * chars.length));
+  }
+  return password;
+}
+
+// Rota POST para adicionar múltiplos mangás ao usuário
+router.post("/:userId/mangas/bulk", async (req, res) => {
+  const { userId } = req.params;
+  const { mangaIds } = req.body;
+
+  if (!Array.isArray(mangaIds) || mangaIds.length === 0) {
+    return res.status(400).json({ message: "Nenhum mangá foi fornecido." });
+  }
+
+  try {
+    // Verifica se o usuário existe
+    const userResult = await pool.query("SELECT * FROM usuarios WHERE id = $1", [userId]);
+
+    if (userResult.rows.length === 0) {
+      return res.status(404).json({ message: "Usuário não encontrado" });
+    }
+
+    // Preparar inserção dos mangás
+    const values = [];
+    mangaIds.forEach((mangaId, index) => {
+      values.push(`($1, $${index + 2})`);
+    });
+
+    const query = `
+      INSERT INTO user_mangas (user_id, manga_id)
+      VALUES ${values.join(',')}
+      ON CONFLICT DO NOTHING
+    `;
+
+    await pool.query(query, [userId, ...mangaIds]);
+
+    res.status(200).json({ message: "Mangás adicionados com sucesso!" });
+  } catch (error) {
+    console.error('Erro ao adicionar mangás:', error);
+    res.status(500).json({ message: 'Erro ao adicionar mangás' });
+  }
+});
 
 // Rota POST para criar um novo usuário
 router.post("/", async (req, res) => {
@@ -10,7 +71,7 @@ router.post("/", async (req, res) => {
   let is_admin = false;
 
   // Senha padrão para definir um usuário como administrador
-  const adminPassword = process.env.ADMIN_PASSWORD; // Agora usando a variável de ambiente
+  const adminPassword = process.env.ADMIN_PASSWORD; // Usando variável de ambiente
 
   // Verifica se a senha de administrador está correta
   if (isAdminPassword && isAdminPassword === adminPassword) {
@@ -32,14 +93,13 @@ router.post("/", async (req, res) => {
   }
 });
 
-
 // Rota POST para autenticar o usuário
 router.post("/login", async (req, res) => {
   const { email, senha } = req.body;
 
   try {
     const result = await pool.query(
-      "SELECT id, is_admin FROM usuarios WHERE email = $1 AND senha = $2",
+      "SELECT id, is_admin, password_reset FROM usuarios WHERE email = $1 AND senha = $2",
       [email, senha]
     );
 
@@ -48,6 +108,7 @@ router.post("/login", async (req, res) => {
         message: "Login bem-sucedido",
         usuarioId: result.rows[0].id,
         isAdmin: result.rows[0].is_admin, // Retorna se o usuário é administrador
+        passwordReset: result.rows[0].password_reset, // Indica se a senha foi resetada
       });
     } else {
       res.status(401).json({ message: "Email ou senha incorretos" });
@@ -58,64 +119,91 @@ router.post("/login", async (req, res) => {
   }
 });
 
-// Rota POST para adicionar um mangá à lista do usuário
-router.post("/:id/mangas", async (req, res) => {
-  const userId = req.params.id;
-  const { mangaId } = req.body;
+// Rota POST para solicitar recuperação de senha
+router.post("/forgot-password", async (req, res) => {
+  const { email } = req.body;
 
-  try {
-    await pool.query(
-      "INSERT INTO user_mangas (user_id, manga_id) VALUES ($1, $2) ON CONFLICT DO NOTHING",
-      [userId, mangaId]
-    );
-    res.status(200).json({ message: "Mangá adicionado com sucesso!" });
-  } catch (error) {
-    console.error("Erro ao adicionar mangá ao usuário", error);
-    res.status(500).json({ message: "Erro ao adicionar mangá ao usuário" });
+  if (!email) {
+    return res.status(400).json({ message: "Email é obrigatório" });
   }
-});
-
-// Rota GET para obter os mangás salvos pelo usuário
-router.get("/:id/mangas", async (req, res) => {
-  const userId = req.params.id;
 
   try {
-    const result = await pool.query(
-      "SELECT manga_id FROM user_mangas WHERE user_id = $1",
-      [userId]
-    );
+    // Verifica se o usuário existe
+    const userResult = await pool.query("SELECT * FROM usuarios WHERE email = $1", [email]);
 
-    const mangaIds = result.rows.map(row => row.manga_id);
-
-    res.status(200).json({ mangaIds });
-  } catch (error) {
-    console.error("Erro ao obter mangás do usuário", error);
-    res.status(500).json({ message: "Erro ao obter mangás do usuário" });
-  }
-});
-
-
-// Rota GET para buscar as informações do usuário logado
-router.get("/perfil/:id", async (req, res) => {
-  const { id } = req.params;
-  
-  try {
-    const result = await pool.query(
-      "SELECT id, nome, email, foto_perfil, preferencias_leitura FROM usuarios WHERE id = $1",
-      [id]
-    );
-
-    if (result.rows.length > 0) {
-      res.status(200).json(result.rows[0]);
-    } else {
-      res.status(404).json({ message: "Usuário não encontrado" });
+    if (userResult.rows.length === 0) {
+      return res.status(404).json({ message: "Email não encontrado" });
     }
+
+    const user = userResult.rows[0];
+
+    // Gera uma nova senha aleatória
+    const tempPassword = generateRandomPassword(8);
+
+    // Atualiza a senha no banco de dados e define password_reset como true
+    await pool.query("UPDATE usuarios SET senha = $1, password_reset = $2 WHERE id = $3", [tempPassword, true, user.id]);
+
+    // Configura o email
+    const mailOptions = {
+      from: process.env.EMAIL_USER,
+      to: email,
+      subject: 'Recuperação de Senha - Biblioteca de Mangás',
+      text: `Olá ${user.nome},
+
+Sua senha foi redefinida. Sua nova senha temporária é: ${tempPassword}
+
+Por favor, faça login e altere sua senha imediatamente.
+
+Atenciosamente,
+Equipe da Biblioteca de Mangás`,
+    };
+
+    // Envia o email
+    transporter.sendMail(mailOptions, (error, info) => {
+      if (error) {
+        console.error("Erro ao enviar email de recuperação:", error);
+        return res.status(500).json({ message: "Erro ao enviar email de recuperação" });
+      } else {
+        console.log("Email de recuperação enviado:", info.response);
+        return res.status(200).json({ message: "Email de recuperação enviado com sucesso" });
+      }
+    });
+
   } catch (error) {
-    console.error("Erro ao buscar informações do usuário", error);
-    res.status(500).json({ message: "Erro ao buscar informações do usuário" });
+    console.error("Erro ao processar recuperação de senha:", error);
+    res.status(500).json({ message: "Erro ao processar recuperação de senha" });
   }
 });
 
+// Rota PUT para definir nova senha após recuperação
+router.put("/:id/set-password", async (req, res) => {
+  const { id } = req.params;
+  const { newPassword } = req.body;
+
+  if (!newPassword) {
+    return res.status(400).json({ message: "Nova senha é obrigatória" });
+  }
+
+  try {
+    // Verifica se o usuário existe
+    const userResult = await pool.query("SELECT * FROM usuarios WHERE id = $1", [id]);
+
+    if (userResult.rows.length === 0) {
+      return res.status(404).json({ message: "Usuário não encontrado" });
+    }
+
+    // Atualiza a senha e define password_reset como false
+    await pool.query(
+      "UPDATE usuarios SET senha = $1, password_reset = $2 WHERE id = $3",
+      [newPassword, false, id]
+    );
+
+    res.status(200).json({ message: "Senha atualizada com sucesso" });
+  } catch (error) {
+    console.error("Erro ao atualizar senha do usuário:", error);
+    res.status(500).json({ message: "Erro ao atualizar senha do usuário" });
+  }
+});
 
 // Middleware para verificar se o usuário é administrador
 function verificarAdmin(req, res, next) {
@@ -199,6 +287,61 @@ router.delete("/:userId/mangas/:mangaId", async (req, res) => {
   }
 });
 
+// Rota GET para obter informações do usuário
+router.get("/perfil/:id", async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    // Verifica se o usuário existe
+    const userResult = await pool.query("SELECT * FROM usuarios WHERE id = $1", [id]);
+
+    if (userResult.rows.length === 0) {
+      return res.status(404).json({ message: "Usuário não encontrado" });
+    }
+
+    const user = userResult.rows[0];
+
+    res.status(200).json({
+      id: user.id,
+      nome: user.nome,
+      email: user.email,
+      foto_perfil: user.foto_perfil,
+      preferencias_leitura: user.preferencias_leitura,
+    });
+  } catch (error) {
+    console.error("Erro ao obter informações do usuário:", error);
+    res.status(500).json({ message: "Erro ao obter informações do usuário" });
+  }
+});
+
+// Rota GET para obter os mangás do usuário
+router.get("/:userId/mangas", async (req, res) => {
+  const { userId } = req.params;
+
+  try {
+    // Verifica se o usuário existe
+    const userResult = await pool.query("SELECT * FROM usuarios WHERE id = $1", [userId]);
+
+    if (userResult.rows.length === 0) {
+      return res.status(404).json({ message: "Usuário não encontrado" });
+    }
+
+    // Obtém os IDs dos mangás associados ao usuário
+    const mangasResult = await pool.query(
+      "SELECT manga_id FROM user_mangas WHERE user_id = $1",
+      [userId]
+    );
+
+    const mangaIds = mangasResult.rows.map(row => row.manga_id);
+
+    res.status(200).json({ mangaIds });
+  } catch (error) {
+    console.error("Erro ao obter mangás do usuário:", error);
+    res.status(500).json({ message: "Erro ao obter mangás do usuário" });
+  }
+});
+
+
 // Rota GET para buscar todos os usuários (apenas para administradores)
 router.get("/admin/usuarios", verificarAdmin, async (req, res) => {
   try {
@@ -216,23 +359,23 @@ router.put("/perfil/:id", async (req, res) => {
   const { preferencias_leitura } = req.body;
 
   try {
-      // Verifica se o usuário existe
-      const userResult = await pool.query("SELECT * FROM usuarios WHERE id = $1", [id]);
+    // Verifica se o usuário existe
+    const userResult = await pool.query("SELECT * FROM usuarios WHERE id = $1", [id]);
 
-      if (userResult.rows.length === 0) {
-          return res.status(404).json({ message: "Usuário não encontrado" });
-      }
+    if (userResult.rows.length === 0) {
+      return res.status(404).json({ message: "Usuário não encontrado" });
+    }
 
-      // Atualiza as preferências do usuário
-      await pool.query(
-          "UPDATE usuarios SET preferencias_leitura = $1 WHERE id = $2",
-          [preferencias_leitura, id]
-      );
+    // Atualiza as preferências do usuário
+    await pool.query(
+      "UPDATE usuarios SET preferencias_leitura = $1 WHERE id = $2",
+      [preferencias_leitura, id]
+    );
 
-      res.status(200).json({ message: "Preferências atualizadas com sucesso" });
+    res.status(200).json({ message: "Preferências atualizadas com sucesso" });
   } catch (error) {
-      console.error("Erro ao atualizar preferências do usuário", error);
-      res.status(500).json({ message: "Erro ao atualizar preferências do usuário" });
+    console.error("Erro ao atualizar preferências do usuário", error);
+    res.status(500).json({ message: "Erro ao atualizar preferências do usuário" });
   }
 });
 
@@ -296,7 +439,5 @@ router.put("/:id", async (req, res) => {
     res.status(500).json({ message: "Erro ao atualizar perfil do usuário" });
   }
 });
-
-
 
 module.exports = router;

@@ -16,6 +16,7 @@
     "express": "^4.21.0",
     "locadoradeanimes": "file:",
     "multer": "^1.4.5-lts.1",
+    "nodemailer": "^6.9.1",
     "pg": "^8.13.0"
   },
   "devDependencies": {

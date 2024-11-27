@@ -1,14 +1,12 @@
-body,
-html {
+body, html {
   margin: 0;
   padding: 0;
   height: 100%;
   font-family: "Arial", sans-serif;
 }
 
-.register-page {
-  background: url("https://wallpapercave.com/wp/wp5128415.jpg") no-repeat center
-    center fixed;
+html {
+  background: url("https://wallpapercave.com/wp/wp5128415.jpg") no-repeat center center fixed;
   background-size: cover;
   height: 100%;
 }
